@@ -40,10 +40,19 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""View"",
                     ""type"": ""Value"",
                     ""id"": ""4d5b0bb4-a007-4bd4-a573-c907c705c226"",
-                    ""expectedControlType"": ""Delta"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Drag"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c3daee0-4899-43c4-ba08-fcda1f76dd67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""View"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab763ef8-da65-4a03-86c5-a5dfc0fcf548"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         m_FPSMap = asset.FindActionMap("FPSMap", throwIfNotFound: true);
         m_FPSMap_Movement = m_FPSMap.FindAction("Movement", throwIfNotFound: true);
         m_FPSMap_View = m_FPSMap.FindAction("View", throwIfNotFound: true);
+        m_FPSMap_Drag = m_FPSMap.FindAction("Drag", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +206,14 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     private List<IFPSMapActions> m_FPSMapActionsCallbackInterfaces = new List<IFPSMapActions>();
     private readonly InputAction m_FPSMap_Movement;
     private readonly InputAction m_FPSMap_View;
+    private readonly InputAction m_FPSMap_Drag;
     public struct FPSMapActions
     {
         private @BasePlayerInputActions m_Wrapper;
         public FPSMapActions(@BasePlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_FPSMap_Movement;
         public InputAction @View => m_Wrapper.m_FPSMap_View;
+        public InputAction @Drag => m_Wrapper.m_FPSMap_Drag;
         public InputActionMap Get() { return m_Wrapper.m_FPSMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @View.started += instance.OnView;
             @View.performed += instance.OnView;
             @View.canceled += instance.OnView;
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
         }
 
         private void UnregisterCallbacks(IFPSMapActions instance)
@@ -216,6 +242,9 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @View.started -= instance.OnView;
             @View.performed -= instance.OnView;
             @View.canceled -= instance.OnView;
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
         }
 
         public void RemoveCallbacks(IFPSMapActions instance)
@@ -237,5 +266,6 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnView(InputAction.CallbackContext context);
+        void OnDrag(InputAction.CallbackContext context);
     }
 }
