@@ -26,6 +26,9 @@
 # Gradle cache directory
 .gradle/
 
+# MacOS files
+.DS_Store
+
 # Draw.io temp files
 *.drawio.bkp
 *.drawio.dtmp
