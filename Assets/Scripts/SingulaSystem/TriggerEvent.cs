@@ -4,10 +4,12 @@ using UnityEngine;
 namespace SingulaSystem {
     [RequireComponent(typeof(BoxCollider))]
     public class TriggerEvent : MonoBehaviour {
-        public int Id;
-        public event Action<int, Collider> OnTriggerEvent; 
+        public uint Id;
+        public event Action<uint, Collider> OnTriggerEventStart;
+        public event Action<uint, Collider> OnTriggerEventEnd; 
 
         private void OnEnable() => GetComponent<BoxCollider>().isTrigger = true;
-        private void OnTriggerEnter(Collider other) => OnTriggerEvent?.Invoke(Id, other);
+        private void OnTriggerEnter(Collider other) => OnTriggerEventStart?.Invoke(Id, other);
+        private void OnTriggerExit(Collider other) => OnTriggerEventEnd?.Invoke(Id, other);
     }
 }

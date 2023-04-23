@@ -16,13 +16,13 @@ namespace SingulaSystem {
             _rigidbody = GetComponent<Rigidbody>();
             _transform = GetComponent<Transform>();
 
-            for (int index = -1; ++index < Pimples.Length;) {
-                Pimples[index].Trigger.OnTriggerEvent += PimpleTriggered;
+            for (uint index = 0; index < Pimples.Length; index++) {
+                Pimples[index].Trigger.OnTriggerEventStart += PimpleTriggered;
                 Pimples[index].Trigger.Id = index;
             }
         }
 
-        private void PimpleTriggered(int index, Collider collider) {
+        private void PimpleTriggered(uint index, Collider collider) {
             var otherLimb = collider.GetComponent<Singula>();
 
             if (otherLimb != null && otherLimb.HasSlot) {
