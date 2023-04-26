@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SingulaSystem {
+namespace SingulaSystem.View {
     [RequireComponent(typeof(BoxCollider))]
     public class TriggerEvent : MonoBehaviour {
         public uint Id;

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SingulaSystem {
+namespace SingulaSystem.Model {
     [RequireComponent(typeof(Rigidbody))]
     public class Singula : MonoBehaviour {
         [HideInInspector] public Pimple[] Pimples = Array.Empty<Pimple>();

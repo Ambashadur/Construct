@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SingulaSystem {
+namespace SingulaSystem.Model {
     [Serializable]
     public class Pimple {
         public bool IsTaken;
