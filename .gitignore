@@ -31,7 +31,7 @@
 
 # Draw.io temp files
 *.drawio.bkp
-*.drawio.dtmp
+*.dtmp
 
 # Unity settings
 .dwlt

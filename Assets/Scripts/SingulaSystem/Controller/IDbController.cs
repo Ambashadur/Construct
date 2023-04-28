@@ -1,5 +1,5 @@
 namespace SingulaSystem.Controller {
-    public interface IDbWebController {
+    public interface IDbController {
         
     }
 }
