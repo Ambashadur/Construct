@@ -12,19 +12,22 @@ namespace SingulaSystem.Controller {
         private IDbController _dbController;
         private ISingulaView _singulaView;
 
-        public void SingulaNear(int slaveSingulaId, int masterSingulaId, int masterSingulaPimpleId) {
-            if (slaveSingulaId < 0 
-                || slaveSingulaId >= Conventus.Singulas.Length
-                || masterSingulaId < 0
-                || masterSingulaId >= Conventus.Singulas.Length) return;
+        public SingulaController(ISingulaView singulaView) {
+            _singulaView = singulaView;
+        }
 
-            var masterSingula = Conventus.Singulas[masterSingulaId];
+        public void SingulaNear(
+            Singula slaveSingula, 
+            Singula masterSingula, 
+            int masterSingulaPimpleId)
+        {
+            if (!slaveSingula.Slot.HasValue
+                || Conventus.Hirearchy[slaveSingula.Id] != masterSingula.Id) return;
 
-            if (masterSingulaPimpleId < 0 || masterSingulaPimpleId >= masterSingula.Pimples.Length) return;
+            var slaveSingulaPosition = masterSingula.transform.TransformPoint(
+                masterSingula.Pimples[masterSingulaPimpleId].Position - slaveSingula.Slot.Value);
 
-            var slaveSingula = Conventus.Singulas[slaveSingulaId];
-
-            //TODO: Расчёт местоположения модели для демонстрации возможно положния модели
+            _singulaView.ShowSingulaJoin(slaveSingula, slaveSingulaPosition);
         }
 
         public void SingulaAway() {

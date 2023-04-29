@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SingulaSystem;
+using SingulaSystem.Controller;
+using SingulaSystem.View;
+using SingulaSystem.Model;
 
 namespace Player {
     public class PlayerInteraction : MonoBehaviour {
@@ -11,6 +13,13 @@ namespace Player {
         private float _distanceToSingula;
         private Transform _singulaPosition;
         private Rigidbody _singulaRigidbody;
+
+        [SerializeField] private SingulaView _singulaView;
+        private SingulaController _singulaController;
+
+        private void OnEnable() {
+            _singulaController = new SingulaController(_singulaView);
+        }
 
         private void Update() {
             if (_isDrag) {

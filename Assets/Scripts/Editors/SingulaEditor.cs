@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using SingulaSystem;
+using SingulaSystem.Model;
 
 namespace Editors {
     [CustomEditor(typeof(Singula))]
@@ -31,7 +32,7 @@ namespace Editors {
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("HasSlot"));
 
-            if (_singulaTarget.HasSlot) {
+            if (_singulaTarget.Slot.HasValue) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Slot"));
             }
 
@@ -74,12 +75,12 @@ namespace Editors {
         }
 
         private void ProcessSlot() {
-            if (!_singulaTarget.HasSlot) return;
+            if (_singulaTarget.Slot.HasValue) return;
 
             Handles.color = Color.red;
             EditorGUI.BeginChangeCheck();
 
-            var position = _singulaTarget.transform.TransformPoint(_singulaTarget.Slot);
+            var position = _singulaTarget.transform.TransformPoint(_singulaTarget.Slot.Value);
 
             var newPosition = Handles.FreeMoveHandle(
                     position, 

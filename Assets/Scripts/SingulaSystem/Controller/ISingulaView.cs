@@ -1,8 +1,9 @@
 using UnityEngine;
+using SingulaSystem.Model;
 
 namespace SingulaSystem.Controller {
     public interface ISingulaView {
-        public void ShowSingulaJoin(int singulaId, Vector3 position);
+        public void ShowSingulaJoin(Singula singula, Vector3 position);
 
         public void HideSingulaJoin(int singulaId);
 
