@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player {
+namespace Construct.Player {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInteraction))]
     public class PlayerController : MonoBehaviour {
         [SerializeField] private Transform _playerCamera;

@@ -1,10 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SingulaSystem.Controller;
-using SingulaSystem.View;
-using SingulaSystem.Model;
+using Construct.Views;
 
-namespace Player {
+namespace Construct.Player {
     public class PlayerInteraction : MonoBehaviour {
         [SerializeField] private Transform _playerCamera;
         [SerializeField] private float _distance = 100.0f;
@@ -13,13 +11,6 @@ namespace Player {
         private float _distanceToSingula;
         private Transform _singulaPosition;
         private Rigidbody _singulaRigidbody;
-
-        [SerializeField] private SingulaView _singulaView;
-        private SingulaController _singulaController;
-
-        private void OnEnable() {
-            _singulaController = new SingulaController(_singulaView);
-        }
 
         private void Update() {
             if (_isDrag) {
@@ -33,7 +24,7 @@ namespace Player {
 
             var ray = new Ray(_playerCamera.position, _playerCamera.forward);
             if (Physics.Raycast(ray, out var hit, _distance)) {
-                var singula = hit.transform.GetComponent<Singula>();
+                var singula = hit.transform.GetComponent<SingulaView>();
                 if (singula == null) return;
 
                 _singulaRigidbody = hit.transform.GetComponent<Rigidbody>();

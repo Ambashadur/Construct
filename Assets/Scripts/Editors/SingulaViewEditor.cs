@@ -1,19 +1,18 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using SingulaSystem;
-using SingulaSystem.Model;
+using Construct.Views;
 
-namespace Editors {
-    [CustomEditor(typeof(Singula))]
-    public class SingulaEditor : Editor {
+namespace Construct.Editors {
+    [CustomEditor(typeof(SingulaView))]
+    public class SingulaViewEditor : Editor {
         private readonly float ITEM_LIST_HEIGHT = EditorGUIUtility.singleLineHeight * 2 + 5;
 
-        private Singula _singulaTarget;
+        private SingulaView _singulaTarget;
         private ReorderableList _pimpleList;
 
         private void OnEnable() {
-            _singulaTarget = target as Singula;
+            _singulaTarget = target as SingulaView;
             _pimpleList = new ReorderableList(
                 serializedObject: serializedObject, 
                 elements: serializedObject.FindProperty("Pimples"), 
@@ -23,7 +22,9 @@ namespace Editors {
                 displayRemoveButton: true);
 
             _pimpleList.drawHeaderCallback = DrawHeader;
-            _pimpleList.drawElementCallback = DrawListItems; 
+            _pimpleList.drawElementCallback = DrawListItems;
+            _pimpleList.onAddCallback = AddItem;
+            // _pimpleList.onRemoveCallback = RemoveItem;
             _pimpleList.elementHeight = ITEM_LIST_HEIGHT;
         }
 
@@ -32,7 +33,7 @@ namespace Editors {
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("HasSlot"));
 
-            if (_singulaTarget.Slot.HasValue) {
+            if (_singulaTarget.HasSlot) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Slot"));
             }
 
@@ -75,12 +76,12 @@ namespace Editors {
         }
 
         private void ProcessSlot() {
-            if (_singulaTarget.Slot.HasValue) return;
+            if (!_singulaTarget.HasSlot) return;
 
             Handles.color = Color.red;
             EditorGUI.BeginChangeCheck();
 
-            var position = _singulaTarget.transform.TransformPoint(_singulaTarget.Slot.Value);
+            var position = _singulaTarget.transform.TransformPoint(_singulaTarget.Slot);
 
             var newPosition = Handles.FreeMoveHandle(
                     position, 
@@ -109,12 +110,24 @@ namespace Editors {
 
             EditorGUI.LabelField(labelRect, "Position");
             EditorGUI.PropertyField(propertyRect, element.FindPropertyRelative("Position"), GUIContent.none);
+        }
 
-            labelRect.y += EditorGUIUtility.singleLineHeight + 5;
-            propertyRect.y += EditorGUIUtility.singleLineHeight + 5;
+        private void AddItem(ReorderableList list) {
+            var index = list.serializedProperty.arraySize;
+            list.serializedProperty.arraySize++;
+            list.index = index;
 
-            EditorGUI.LabelField(labelRect, "Trigger");
-            EditorGUI.PropertyField(propertyRect, element.FindPropertyRelative("Trigger"), GUIContent.none);
+            var pimple = list.serializedProperty.GetArrayElementAtIndex(index);
+
+            pimple.FindPropertyRelative("Id").intValue = index;
+
+            var triggerPimple = new GameObject("TriggerPimple");
+            triggerPimple.AddComponent<BoxCollider>();
+            var triggerPimpleView = triggerPimple.AddComponent<TriggerPimpleView>();
+            triggerPimple.transform.SetParent(_singulaTarget.transform);
+            triggerPimple.transform.position = _singulaTarget.transform.position;
+
+            triggerPimpleView.PimpleId = index;
         }
     }
 }

@@ -5,7 +5,7 @@ using Construct.Components;
 namespace Construct.Views {
     [RequireComponent(typeof(BoxCollider))]
     public class TriggerPimpleView : MonoBehaviour {
-        [HideInInspector] public int PimpleId;
+        [ReadOnly] public int PimpleId;
         [HideInInspector] public int EcsSingulaEntityId { get; set; }
         [HideInInspector] public EcsPool<TriggerEnter> TriggerEnterPool { get; set; }
         [HideInInspector] public EcsPool<TriggerExit> TriggerExitPool { get; set; }
