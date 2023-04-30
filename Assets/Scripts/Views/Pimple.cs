@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SingulaSystem.Model {
+namespace Construct.Views {
     public class Pimple {
         public int Id;
         public bool IsTaken;

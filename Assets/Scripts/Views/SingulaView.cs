@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using Leopotam.EcsLite;
 
-namespace SingulaSystem.Model {
-    public class Singula : MonoBehaviour {
+namespace Construct.Views {
+    public class SingulaView : MonoBehaviour {
         public int Id;
         public string Name;
         public Pimple[] Pimples = Array.Empty<Pimple>();
