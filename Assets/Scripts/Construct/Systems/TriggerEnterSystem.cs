@@ -10,7 +10,6 @@ namespace Construct.Systems {
         private readonly EcsPool<Conventus> _conventusPool;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<SingulaFrame> _singulaFramePool;
-        private readonly EcsPool<SlaveSingula> _slaveSingulaPool;
         private readonly Material _greenTransparent;
         
         public TriggerEnterSystem(EcsWorld world, Material greenTransparent) {
@@ -21,7 +20,6 @@ namespace Construct.Systems {
             _conventusPool = _world.GetPool<Conventus>();
             _singulaPool = _world.GetPool<Singula>();
             _singulaFramePool = _world.GetPool<SingulaFrame>();
-            _slaveSingulaPool = _world.GetPool<SlaveSingula>();
         }
         
         public void Run (IEcsSystems systems) {
@@ -52,8 +50,8 @@ namespace Construct.Systems {
                     singulaFrame.PimpleId = triggerEnter.PimpleId;
                     singulaFrame.OtherSingulaView = triggerEnter.OtherSingulaView;
 
-                    ref var slaveSingula = ref _slaveSingulaPool.Add(triggerEnter.OtherSingulaView.EcsEntity);
-                    slaveSingula.MasterSingulaEcsEntity = entity;
+                    ref var otherSingula = ref _singulaPool.Get(singulaFrame.OtherSingulaView.EcsEntity);
+                    otherSingula.MasterSingulaEcsEntity = entity;
                 }
 
                 _triggerEnterPool.Del(entity);

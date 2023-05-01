@@ -55,9 +55,18 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DoAction"",
+                    ""name"": ""Join"",
                     ""type"": ""Button"",
                     ""id"": ""6410e3f2-03de-4452-966a-98af5de0faf5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Detach"",
+                    ""type"": ""Button"",
+                    ""id"": ""c1712d66-65d8-4ebe-8d31-669ae000b718"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -149,7 +158,18 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DoAction"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b804d03-0574-4821-b93d-4f4d8a9dde7e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Detach"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -163,7 +183,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         m_FPSMap_Movement = m_FPSMap.FindAction("Movement", throwIfNotFound: true);
         m_FPSMap_View = m_FPSMap.FindAction("View", throwIfNotFound: true);
         m_FPSMap_Drag = m_FPSMap.FindAction("Drag", throwIfNotFound: true);
-        m_FPSMap_DoAction = m_FPSMap.FindAction("DoAction", throwIfNotFound: true);
+        m_FPSMap_Join = m_FPSMap.FindAction("Join", throwIfNotFound: true);
+        m_FPSMap_Detach = m_FPSMap.FindAction("Detach", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -228,7 +249,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_FPSMap_Movement;
     private readonly InputAction m_FPSMap_View;
     private readonly InputAction m_FPSMap_Drag;
-    private readonly InputAction m_FPSMap_DoAction;
+    private readonly InputAction m_FPSMap_Join;
+    private readonly InputAction m_FPSMap_Detach;
     public struct FPSMapActions
     {
         private @BasePlayerInputActions m_Wrapper;
@@ -236,7 +258,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         public InputAction @Movement => m_Wrapper.m_FPSMap_Movement;
         public InputAction @View => m_Wrapper.m_FPSMap_View;
         public InputAction @Drag => m_Wrapper.m_FPSMap_Drag;
-        public InputAction @DoAction => m_Wrapper.m_FPSMap_DoAction;
+        public InputAction @Join => m_Wrapper.m_FPSMap_Join;
+        public InputAction @Detach => m_Wrapper.m_FPSMap_Detach;
         public InputActionMap Get() { return m_Wrapper.m_FPSMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,9 +278,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Drag.started += instance.OnDrag;
             @Drag.performed += instance.OnDrag;
             @Drag.canceled += instance.OnDrag;
-            @DoAction.started += instance.OnDoAction;
-            @DoAction.performed += instance.OnDoAction;
-            @DoAction.canceled += instance.OnDoAction;
+            @Join.started += instance.OnJoin;
+            @Join.performed += instance.OnJoin;
+            @Join.canceled += instance.OnJoin;
+            @Detach.started += instance.OnDetach;
+            @Detach.performed += instance.OnDetach;
+            @Detach.canceled += instance.OnDetach;
         }
 
         private void UnregisterCallbacks(IFPSMapActions instance)
@@ -271,9 +297,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Drag.started -= instance.OnDrag;
             @Drag.performed -= instance.OnDrag;
             @Drag.canceled -= instance.OnDrag;
-            @DoAction.started -= instance.OnDoAction;
-            @DoAction.performed -= instance.OnDoAction;
-            @DoAction.canceled -= instance.OnDoAction;
+            @Join.started -= instance.OnJoin;
+            @Join.performed -= instance.OnJoin;
+            @Join.canceled -= instance.OnJoin;
+            @Detach.started -= instance.OnDetach;
+            @Detach.performed -= instance.OnDetach;
+            @Detach.canceled -= instance.OnDetach;
         }
 
         public void RemoveCallbacks(IFPSMapActions instance)
@@ -296,6 +325,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         void OnMovement(InputAction.CallbackContext context);
         void OnView(InputAction.CallbackContext context);
         void OnDrag(InputAction.CallbackContext context);
-        void OnDoAction(InputAction.CallbackContext context);
+        void OnJoin(InputAction.CallbackContext context);
+        void OnDetach(InputAction.CallbackContext context);
     }
 }

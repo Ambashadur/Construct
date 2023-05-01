@@ -9,7 +9,6 @@ namespace Construct.Systems {
         private readonly EcsPool<TriggerExit> _triggerExitPool;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<SingulaFrame> _singulaFramePool;
-        private readonly EcsPool<SlaveSingula> _slaveSingulaPool;
 
         public TriggerExitSystem(EcsWorld world) {
             _world = world;
@@ -17,7 +16,6 @@ namespace Construct.Systems {
             _triggerExitPool = _world.GetPool<TriggerExit>();
             _singulaPool = _world.GetPool<Singula>();
             _singulaFramePool = _world.GetPool<SingulaFrame>();
-            _slaveSingulaPool = _world.GetPool<SlaveSingula>();
         }   
 
         public void Run (IEcsSystems systems) {
@@ -29,8 +27,10 @@ namespace Construct.Systems {
                     ref var singulaFrame = ref _singulaFramePool.Get(entity);
                     
                     if (singulaFrame.OtherSingulaView.Id == triggerExit.OtherSingulaView.Id) {
+                        ref var otherSingula = ref _singulaPool.Get(singulaFrame.OtherSingulaView.EcsEntity);
+                        otherSingula.MasterSingulaEcsEntity = null;
+
                         GameObject.Destroy(singulaFrame.FrameGameObject);
-                        _slaveSingulaPool.Del(triggerExit.OtherSingulaView.EcsEntity);
                         _singulaFramePool.Del(entity);
                     }
                 }

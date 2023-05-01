@@ -9,7 +9,6 @@ namespace Construct.Systems {
         private readonly EcsPool<JoinSingula> _joinSingulaPool;
         private readonly EcsPool<SingulaFrame> _singulaFramePool;
         private readonly EcsPool<Singula> _singulaPool;
-        private readonly EcsPool<SlaveSingula> _slaveSingulaPool;
 
         public JoinSingulaSystem(EcsWorld world) {
             _world = world;
@@ -17,7 +16,6 @@ namespace Construct.Systems {
             _joinSingulaPool = _world.GetPool<JoinSingula>();
             _singulaFramePool = _world.GetPool<SingulaFrame>();
             _singulaPool = _world.GetPool<Singula>();
-            _slaveSingulaPool = _world.GetPool<SlaveSingula>();
         }
 
         public void Run (IEcsSystems systems) {
@@ -31,7 +29,7 @@ namespace Construct.Systems {
                     singulaFrame.OtherSingulaView.transform.SetParent(singula.SingulaView.transform);
 
                     singula.SingulaView.Pimples[singulaFrame.PimpleId].IsTaken = true;
-                    
+
                     if (singula.SingulaView.TryGetComponent<FixedJoint>(out var fixedJoint)) {
                         fixedJoint.connectedBody = singulaFrame.OtherSingulaView.GetComponent<Rigidbody>();
                     } else {
@@ -40,7 +38,6 @@ namespace Construct.Systems {
                     }
 
                     GameObject.Destroy(singulaFrame.FrameGameObject);
-                    _slaveSingulaPool.Del(singulaFrame.OtherSingulaView.EcsEntity);
                     _singulaFramePool.Del(entity);
                 }
 

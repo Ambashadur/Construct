@@ -36,7 +36,7 @@ namespace Player {
 
             _playerInput.FPSMap.Drag.started += _interaction.StartDrag;
             _playerInput.FPSMap.Drag.canceled += _interaction.PerfomDrag;
-            _playerInput.FPSMap.DoAction.started += _interaction.DoAction;
+            _playerInput.FPSMap.Join.started += _interaction.Join;
         }
 
         private void Update() {
