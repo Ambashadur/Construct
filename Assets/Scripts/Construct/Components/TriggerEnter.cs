@@ -1,8 +1,10 @@
 using UnityEngine;
+using Construct.Views;
 
 namespace Construct.Components {
     public struct TriggerEnter {
         public int PimpleId;
-        public Collider otherCollider;
+        public Mesh OtherSingulaMesh;
+        public SingulaView OtherSingulaView;
     }
 }

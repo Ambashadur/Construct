@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Construct.Player {
+namespace Player {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInteraction))]
     public class PlayerController : MonoBehaviour {
         [SerializeField] private Transform _playerCamera;
@@ -36,6 +36,7 @@ namespace Construct.Player {
 
             _playerInput.FPSMap.Drag.started += _interaction.StartDrag;
             _playerInput.FPSMap.Drag.canceled += _interaction.PerfomDrag;
+            _playerInput.FPSMap.DoAction.started += _interaction.DoAction;
         }
 
         private void Update() {

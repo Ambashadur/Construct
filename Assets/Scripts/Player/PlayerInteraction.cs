@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Leopotam.EcsLite;
+using Construct;
 using Construct.Views;
+using Construct.Components;
 
-namespace Construct.Player {
-    public class PlayerInteraction : MonoBehaviour {
+namespace Player {
+    public class PlayerInteraction : PlayerConnection {
         [SerializeField] private Transform _playerCamera;
         [SerializeField] private float _distance = 100.0f;
 
@@ -11,6 +14,7 @@ namespace Construct.Player {
         private float _distanceToSingula;
         private Transform _singulaPosition;
         private Rigidbody _singulaRigidbody;
+        private SingulaView _singulaView;
 
         private void Update() {
             if (_isDrag) {
@@ -24,9 +28,10 @@ namespace Construct.Player {
 
             var ray = new Ray(_playerCamera.position, _playerCamera.forward);
             if (Physics.Raycast(ray, out var hit, _distance)) {
-                var singula = hit.transform.GetComponent<SingulaView>();
-                if (singula == null) return;
+                var singulaView = hit.transform.GetComponent<SingulaView>();
+                if (singulaView == null) return;
 
+                _singulaView = singulaView;
                 _singulaRigidbody = hit.transform.GetComponent<Rigidbody>();
                 _singulaRigidbody.isKinematic = true;
 
@@ -37,6 +42,18 @@ namespace Construct.Player {
         }
 
         public void PerfomDrag(InputAction.CallbackContext context) {
+            if (_isDrag) {
+                _isDrag = false;
+                _singulaPosition = null;
+                _singulaRigidbody.isKinematic = false;
+                _singulaRigidbody = null;
+            }
+        }
+
+        public void DoAction(InputAction.CallbackContext context) {
+            ref var slaveSingula = ref World.GetPool<SlaveSingula>().Get(_singulaView.EcsEntity);
+            World.GetPool<JoinSingula>().Add(slaveSingula.MasterSingulaEcsEntity);
+
             if (_isDrag) {
                 _isDrag = false;
                 _singulaPosition = null;

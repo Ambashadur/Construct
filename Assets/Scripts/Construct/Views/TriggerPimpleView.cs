@@ -1,7 +1,7 @@
 using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
-using Construct.Attributes;
+using Attributes;
 
 namespace Construct.Views {
     [RequireComponent(typeof(BoxCollider))]
@@ -15,18 +15,19 @@ namespace Construct.Views {
         private void OnEnable() => GetComponent<BoxCollider>().isTrigger = true;
 
         private void OnTriggerEnter(Collider other) {
-            if (other.TryGetComponent<SingulaView>(out _)) {
+            if (other.TryGetComponent<SingulaView>(out var otherSingulaView)) {
                 ref var triggerEnter = ref TriggerEnterPool.Add(EcsSingulaEntityId);
                 triggerEnter.PimpleId = PimpleId;
-                triggerEnter.otherCollider = other;
+                triggerEnter.OtherSingulaMesh = other.GetComponent<MeshFilter>().mesh;
+                triggerEnter.OtherSingulaView = otherSingulaView;
             }
         }
 
         private void OnTriggerExit(Collider other) {
-            if (other.TryGetComponent<SingulaView>(out _)) {
+            if (other.TryGetComponent<SingulaView>(out var otherSingulaView)) {
                 ref var triggerExit = ref TriggerExitPool.Add(EcsSingulaEntityId);
                 triggerExit.PimpleId = PimpleId;
-                triggerExit.otherCollider = other;
+                triggerExit.OtherSingulaView = otherSingulaView;
             }
         }
     }

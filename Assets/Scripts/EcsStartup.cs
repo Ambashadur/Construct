@@ -5,17 +5,20 @@ using Construct.Systems;
 namespace Construct {
     sealed class EcsStartup : MonoBehaviour {
         [SerializeField] private Material _greenTransparent;
+        [SerializeField] private PlayerConnection _playerConnection; 
 
         EcsWorld _world;        
         IEcsSystems _systems;
 
         void Start () {
             _world = new EcsWorld ();
+            _playerConnection.World = _world;
             _systems = new EcsSystems (_world);
             _systems
                 .Add(new SingulaSystem(_world))
                 .Add(new TriggerEnterSystem(_world, _greenTransparent))
                 .Add(new TriggerExitSystem(_world))
+                .Add(new JoinSingulaSystem(_world))
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())
                 // .Add (new TestSystem2 ())

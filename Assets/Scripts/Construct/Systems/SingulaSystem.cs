@@ -1,17 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
 using Construct.Views;
 
 namespace Construct.Systems {
-    sealed class SingulaSystem : IEcsInitSystem, IEcsRunSystem {
+    sealed class SingulaSystem : IEcsInitSystem {
         private readonly EcsWorld _world;
         private readonly EcsFilter _filter;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<Conventus> _conventusPool;
 
-        private readonly int _conventusEcsEntityId;
+        private readonly int _conventusEcsEntity;
 
         public SingulaSystem(EcsWorld world) {
             _world = world;
@@ -19,8 +18,8 @@ namespace Construct.Systems {
             _singulaPool = _world.GetPool<Singula>();
             _conventusPool = _world.GetPool<Conventus>();
 
-            _conventusEcsEntityId = _world.NewEntity();
-            ref var conventus = ref _conventusPool.Add(_conventusEcsEntityId);
+            _conventusEcsEntity = _world.NewEntity();
+            ref var conventus = ref _conventusPool.Add(_conventusEcsEntity);
             conventus.Hirearchy = new int[] { -1, 0 };
         }
 
@@ -34,8 +33,8 @@ namespace Construct.Systems {
                 ref var singula = ref _singulaPool.Add(entity);
 
                 singula.SingulaView = singulaView;
-                singula.EcsConventusEntityId = _conventusEcsEntityId;
-                singula.SlaveSingulaFrames = new Dictionary<int, GameObject>();
+                singula.SingulaView.EcsEntity = entity;
+                singula.ConventusEcsEntity = _conventusEcsEntity;
 
                 var triggerPimpleViews = singulaView.GetComponentsInChildren<TriggerPimpleView>();
 
@@ -44,12 +43,6 @@ namespace Construct.Systems {
                     triggerPimpleView.TriggerEnterPool = _world.GetPool<TriggerEnter>();
                     triggerPimpleView.TriggerExitPool = _world.GetPool<TriggerExit>();
                 }
-            }
-        }
-
-        public void Run (IEcsSystems systems) {
-            foreach (var entity in _filter) {
-                
             }
         }
     }
