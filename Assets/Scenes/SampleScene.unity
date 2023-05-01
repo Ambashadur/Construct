@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c997e4d450999543a30c820dfc4c7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _greenTransparent: {fileID: 2100000, guid: 8bd81d2c0706e9b42a1cb1bafb906767, type: 2}
 --- !u!43 &485228346
 Mesh:
   m_ObjectHideFlags: 0
@@ -579,6 +580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PimpleId: 0
+  EcsSingulaEntityId: 0
 --- !u!65 &847081244
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8969,7 +8971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab0156e71d44b4745b00d23ced1a6bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 0
+  Id: 1
   Name: 
   Pimples: []
   Slot: {x: -0.00041007996, y: -1.0000917, z: -0.00000011920929}

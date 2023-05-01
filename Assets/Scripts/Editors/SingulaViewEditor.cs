@@ -5,7 +5,7 @@ using Construct.Views;
 
 namespace Construct.Editors {
     [CustomEditor(typeof(SingulaView))]
-    public class SingulaViewEditor : Editor {
+    sealed public class SingulaViewEditor : Editor {
         private readonly float ITEM_LIST_HEIGHT = EditorGUIUtility.singleLineHeight * 2 + 5;
 
         private SingulaView _singulaTarget;
@@ -24,13 +24,13 @@ namespace Construct.Editors {
             _pimpleList.drawHeaderCallback = DrawHeader;
             _pimpleList.drawElementCallback = DrawListItems;
             _pimpleList.onAddCallback = AddItem;
-            // _pimpleList.onRemoveCallback = RemoveItem;
             _pimpleList.elementHeight = ITEM_LIST_HEIGHT;
         }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Id"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("HasSlot"));
 
             if (_singulaTarget.HasSlot) {

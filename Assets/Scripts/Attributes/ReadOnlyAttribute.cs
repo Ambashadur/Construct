@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Construct {
+namespace Construct.Attributes {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class ReadOnlyAttribute : PropertyAttribute {}
 }
