@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
@@ -27,7 +28,7 @@ namespace Construct.Systems {
 
         public void Init(IEcsSystems systems)
         {
-            var singulaViews = Object.FindObjectsOfType<SingulaView>();
+            var singulaViews = UnityEngine.Object.FindObjectsOfType<SingulaView>();
             var _conventusPool = _world.GetPool<Conventus>();
 
             foreach (var singulaView in singulaViews) {
@@ -37,6 +38,8 @@ namespace Construct.Systems {
                 singula.SingulaView = singulaView;
                 singula.SingulaView.EcsEntity = entity;
                 singula.ConventusEcsEntity = _conventusEcsEntity;
+                singula.SlaveSingulaEcsEntities = new int[singula.SingulaView.Pimples.Length];
+                Array.Fill(singula.SlaveSingulaEcsEntities, -1);
 
                 var meshRenderer = singula.SingulaView.GetComponent<MeshRenderer>();
                 var oldTexture = meshRenderer.material.mainTexture;

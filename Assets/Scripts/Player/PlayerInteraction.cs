@@ -55,9 +55,20 @@ namespace Player {
         public void PerfomDrag(InputAction.CallbackContext context) => EndDrag();
 
         public void Join(InputAction.CallbackContext context) {
+            if (_singulaView == null) return;
+
             ref var singula = ref World.GetPool<Singula>().Get(_singulaView.EcsEntity);
-            World.GetPool<JoinSingula>().Add(singula.MasterSingulaEcsEntity.Value);
-            EndDrag();
+
+            if (singula.MasterSingulaEcsEntity.HasValue) {
+                World.GetPool<JoinSingula>().Add(singula.MasterSingulaEcsEntity.Value);
+                EndDrag();
+            }
+        }
+
+        public void Detach(InputAction.CallbackContext context) {
+            if (_singulaView == null) return;
+
+            World.GetPool<DetachSingula>().Add(_singulaView.EcsEntity);
         }
 
         private void EndDrag() {

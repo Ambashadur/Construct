@@ -22,6 +22,7 @@ namespace Construct {
                 .Add(new JoinSingulaSystem(_world))
                 .Add(new StartFocusSystem(_world))
                 .Add(new EndFocusSystem(_world))
+                .Add(new DetachSingulaSystem(_world))
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif

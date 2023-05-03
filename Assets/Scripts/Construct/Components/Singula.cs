@@ -5,5 +5,6 @@ namespace Construct.Components {
         public SingulaView SingulaView;
         public int ConventusEcsEntity;
         public int? MasterSingulaEcsEntity;
+        public int[] SlaveSingulaEcsEntities;
     }
 }

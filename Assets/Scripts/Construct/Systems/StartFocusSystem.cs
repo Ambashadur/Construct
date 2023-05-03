@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
@@ -19,7 +20,12 @@ namespace Construct.Systems {
         public void Run (IEcsSystems systems) {
             foreach (var entity in _singulaStartFocusFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
-                singula.SingulaView.GetComponent<MeshRenderer>().material.SetInt("_Outline", 1);
+
+                var isFree = Array.TrueForAll(
+                    singula.SlaveSingulaEcsEntities, 
+                    slaveSingulaEcsEntity => slaveSingulaEcsEntity == -1);
+
+                if (isFree) singula.SingulaView.GetComponent<MeshRenderer>().material.SetInt("_Outline", 1);
 
                 _startFocusPool.Del(entity);
             }
