@@ -71,6 +71,15 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Download"",
+                    ""type"": ""Button"",
+                    ""id"": ""23ab0c6f-7a1c-465e-a5db-720cde7e859c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""Detach"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bd90f1c-f58f-47a2-a94a-4821093eb497"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Download"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +205,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         m_FPSMap_Drag = m_FPSMap.FindAction("Drag", throwIfNotFound: true);
         m_FPSMap_Join = m_FPSMap.FindAction("Join", throwIfNotFound: true);
         m_FPSMap_Detach = m_FPSMap.FindAction("Detach", throwIfNotFound: true);
+        m_FPSMap_Download = m_FPSMap.FindAction("Download", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +272,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_FPSMap_Drag;
     private readonly InputAction m_FPSMap_Join;
     private readonly InputAction m_FPSMap_Detach;
+    private readonly InputAction m_FPSMap_Download;
     public struct FPSMapActions
     {
         private @BasePlayerInputActions m_Wrapper;
@@ -260,6 +282,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         public InputAction @Drag => m_Wrapper.m_FPSMap_Drag;
         public InputAction @Join => m_Wrapper.m_FPSMap_Join;
         public InputAction @Detach => m_Wrapper.m_FPSMap_Detach;
+        public InputAction @Download => m_Wrapper.m_FPSMap_Download;
         public InputActionMap Get() { return m_Wrapper.m_FPSMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +307,9 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Detach.started += instance.OnDetach;
             @Detach.performed += instance.OnDetach;
             @Detach.canceled += instance.OnDetach;
+            @Download.started += instance.OnDownload;
+            @Download.performed += instance.OnDownload;
+            @Download.canceled += instance.OnDownload;
         }
 
         private void UnregisterCallbacks(IFPSMapActions instance)
@@ -303,6 +329,9 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Detach.started -= instance.OnDetach;
             @Detach.performed -= instance.OnDetach;
             @Detach.canceled -= instance.OnDetach;
+            @Download.started -= instance.OnDownload;
+            @Download.performed -= instance.OnDownload;
+            @Download.canceled -= instance.OnDownload;
         }
 
         public void RemoveCallbacks(IFPSMapActions instance)
@@ -327,5 +356,6 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         void OnDrag(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
         void OnDetach(InputAction.CallbackContext context);
+        void OnDownload(InputAction.CallbackContext context);
     }
 }

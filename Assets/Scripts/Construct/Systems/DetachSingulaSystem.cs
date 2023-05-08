@@ -20,19 +20,19 @@ namespace Construct.Systems {
             foreach (var entity in _singulaDetachFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
 
-                if (singula.MasterSingulaEcsEntity.HasValue) {
-                    ref var masterSingula = ref _singulaPool.Get(singula.MasterSingulaEcsEntity.Value);
+                // if (singula.MasterSingulaEcsEntity.HasValue) {
+                //     ref var masterSingula = ref _singulaPool.Get(singula.MasterSingulaEcsEntity.Value);
 
-                    masterSingula.SingulaView.GetComponent<FixedJoint>().connectedBody = null;
-                    singula.SingulaView.transform.SetParent(null);
+                //     masterSingula.SingulaView.GetComponent<FixedJoint>().connectedBody = null;
+                //     singula.SingulaView.transform.SetParent(null);
 
-                    for (int i = 0; i < masterSingula.SlaveSingulaEcsEntities.Length; i++) {
-                        if (entity == masterSingula.SlaveSingulaEcsEntities[i]) {
-                            masterSingula.SlaveSingulaEcsEntities[i] = -1;
-                            break;
-                        }
-                    }
-                }
+                //     for (int i = 0; i < masterSingula.SlaveSingulaEcsEntities.Length; i++) {
+                //         if (entity == masterSingula.SlaveSingulaEcsEntities[i]) {
+                //             masterSingula.SlaveSingulaEcsEntities[i] = -1;
+                //             break;
+                //         }
+                //     }
+                // }
 
                 _detachSingulaPool.Del(entity);
             }

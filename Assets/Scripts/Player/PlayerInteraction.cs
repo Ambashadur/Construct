@@ -15,6 +15,12 @@ namespace Player {
         private Rigidbody _singulaRigidbody;
         private SingulaView _singulaView;
 
+        public void Download(InputAction.CallbackContext context) {
+            var conventusEntity = World.NewEntity();
+            ref var loadConventus = ref World.GetPool<LoadConventus>().Add(conventusEntity);
+            loadConventus.Id = 1;
+        }
+
         private void Update() {
             if (_isDrag) {
                 var direction = _playerCamera.position + _playerCamera.forward * _distanceToSingula;
@@ -49,26 +55,18 @@ namespace Player {
                 _isDrag = true;
                 _singulaPosition = _singulaView.transform;
                 _distanceToSingula = Vector3.Distance(_singulaPosition.position, _playerCamera.position);
+                World.GetPool<InHand>().Add(_singulaView.EcsEntity);
             }
         }
 
         public void PerfomDrag(InputAction.CallbackContext context) => EndDrag();
 
         public void Join(InputAction.CallbackContext context) {
-            if (_singulaView == null) return;
-
-            ref var singula = ref World.GetPool<Singula>().Get(_singulaView.EcsEntity);
-
-            if (singula.MasterSingulaEcsEntity.HasValue) {
-                World.GetPool<JoinSingula>().Add(singula.MasterSingulaEcsEntity.Value);
-                EndDrag();
-            }
+            
         }
 
         public void Detach(InputAction.CallbackContext context) {
-            if (_singulaView == null) return;
-
-            World.GetPool<DetachSingula>().Add(_singulaView.EcsEntity);
+            
         }
 
         private void EndDrag() {
@@ -77,6 +75,7 @@ namespace Player {
                 _singulaPosition = null;
                 _singulaRigidbody.isKinematic = false;
                 _singulaRigidbody = null;
+                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
             }
         }
     }

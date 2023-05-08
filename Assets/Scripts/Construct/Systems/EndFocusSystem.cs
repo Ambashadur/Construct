@@ -20,7 +20,6 @@ namespace Construct.Systems {
             foreach (var entity in _singulaEndFocusFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
                 singula.SingulaView.GetComponent<MeshRenderer>().material.SetInt("_Outline", 0);
-
                 _endFocusPool.Del(entity);
             }
         }

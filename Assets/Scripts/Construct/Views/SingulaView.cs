@@ -1,13 +1,13 @@
 using System;
 using UnityEngine;
+using Construct.Model;
+using Attributes;
 
 namespace Construct.Views {
     sealed public class SingulaView : MonoBehaviour {
-        public int Id;
-        public string Name;
-        public Pimple[] Pimples = Array.Empty<Pimple>();
-        public Vector3 Slot;
-        public bool HasSlot;
-        public int EcsEntity;
+        [ReadOnly] public int Id;
+        [ReadOnly] public string Name;
+        [ReadOnly] public int EcsEntity;
+        public Join[] Joins = Array.Empty<Join>();
     }
 }

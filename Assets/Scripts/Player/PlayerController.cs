@@ -38,6 +38,8 @@ namespace Player {
             _playerInput.FPSMap.Drag.canceled += _interaction.PerfomDrag;
             _playerInput.FPSMap.Join.started += _interaction.Join;
             _playerInput.FPSMap.Detach.started += _interaction.Detach;
+
+            _playerInput.FPSMap.Download.started += _interaction.Download;
         }
 
         private void Update() {

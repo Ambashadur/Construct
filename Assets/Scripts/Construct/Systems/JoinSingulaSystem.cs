@@ -23,19 +23,19 @@ namespace Construct.Systems {
                 ref var singulaFrame = ref _singulaFramePool.Get(entity);
                 ref var singula = ref _singulaPool.Get(entity);
 
-                singulaFrame.OtherSingulaView.transform.position = singulaFrame.FrameGameObject.transform.position;
-                singulaFrame.OtherSingulaView.transform.rotation = singulaFrame.FrameGameObject.transform.rotation;
-                singulaFrame.OtherSingulaView.transform.SetParent(singula.SingulaView.transform);
+                // singulaFrame.OtherSingulaView.transform.position = singulaFrame.FrameGameObject.transform.position;
+                // singulaFrame.OtherSingulaView.transform.rotation = singulaFrame.FrameGameObject.transform.rotation;
+                // singulaFrame.OtherSingulaView.transform.SetParent(singula.SingulaView.transform);
 
-                singula.SingulaView.Pimples[singulaFrame.PimpleId].IsTaken = true;
-                singula.SlaveSingulaEcsEntities[singulaFrame.PimpleId] = singulaFrame.OtherSingulaView.EcsEntity;
+                // singula.SingulaView.Pimples[singulaFrame.PimpleId].IsTaken = true;
+                // singula.SlaveSingulaEcsEntities[singulaFrame.PimpleId] = singulaFrame.OtherSingulaView.EcsEntity;
 
-                if (singula.SingulaView.TryGetComponent<FixedJoint>(out var fixedJoint)) {
-                    fixedJoint.connectedBody = singulaFrame.OtherSingulaView.GetComponent<Rigidbody>();
-                } else {
-                    fixedJoint = singula.SingulaView.gameObject.AddComponent<FixedJoint>();
-                    fixedJoint.connectedBody = singulaFrame.OtherSingulaView.GetComponent<Rigidbody>();
-                }
+                // if (singula.SingulaView.TryGetComponent<FixedJoint>(out var fixedJoint)) {
+                //     fixedJoint.connectedBody = singulaFrame.OtherSingulaView.GetComponent<Rigidbody>();
+                // } else {
+                //     fixedJoint = singula.SingulaView.gameObject.AddComponent<FixedJoint>();
+                //     fixedJoint.connectedBody = singulaFrame.OtherSingulaView.GetComponent<Rigidbody>();
+                // }
 
                 GameObject.Destroy(singulaFrame.FrameGameObject);
                 _singulaFramePool.Del(entity);
