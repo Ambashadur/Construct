@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 using Construct.Views;
 
 namespace Construct.Editors {
@@ -28,9 +28,9 @@ namespace Construct.Editors {
         private void OnSceneGUI() {
             Handles.color = Color.green;
 
-            for (int i = -1; ++i < _singulaTarget.Joins.Length;) {
+            foreach (var kv in _singulaTarget.Joins) {
                 EditorGUI.BeginChangeCheck();
-                var position = _singulaTarget.transform.TransformPoint(_singulaTarget.Joins[i].Position);
+                var position = _singulaTarget.transform.TransformPoint(kv.Value.Position);
 
                 var newPosition = Handles.FreeMoveHandle(
                     position, 
@@ -41,7 +41,9 @@ namespace Construct.Editors {
 
                 if (EditorGUI.EndChangeCheck()) {
                     Undo.RecordObject(_singulaTarget, "Change leg vertex position");
-                    _singulaTarget.Joins[i].Position = _singulaTarget.transform.InverseTransformPoint(newPosition);
+                    var value = kv.Value;
+                    value.Position = _singulaTarget.transform.InverseTransformPoint(newPosition);
+                    _singulaTarget.Joins[kv.Key] = value;
                     serializedObject.Update();
                 }
             }

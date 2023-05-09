@@ -5,7 +5,8 @@ using Construct.Services.Impl;
 
 namespace Construct {
     sealed class EcsStartup : MonoBehaviour {
-        [SerializeField] private PlayerConnection _playerConnection; 
+        [SerializeField] private PlayerConnection _playerConnection;
+        [SerializeField] private LayerMask _singulaLayer;
 
         EcsWorld _world;        
         IEcsSystems _systems;
@@ -15,12 +16,14 @@ namespace Construct {
             _playerConnection.World = _world;
             _systems = new EcsSystems (_world);
             _systems
+                .Add(new ReleaseFromHandSystem(_world))
+                .Add(new TakeToHandSystem(_world))
+                .Add(new EndFocusSystem(_world))
+                .Add(new StartFocusSystem(_world))
                 .Add(new SingulaSystem(_world))
                 .Add(new JoinSingulaSystem(_world))
-                .Add(new StartFocusSystem(_world))
-                .Add(new EndFocusSystem(_world))
                 .Add(new DetachSingulaSystem(_world))
-                .Add(new LoadConventusSystem(_world, new DbController()))
+                .Add(new LoadConventusSystem(_world, _singulaLayer, new DbController()))
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif

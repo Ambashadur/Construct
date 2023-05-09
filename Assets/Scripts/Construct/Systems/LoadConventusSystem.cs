@@ -1,10 +1,10 @@
 using System.Linq;
-using UnityEngine;
-using Leopotam.EcsLite;
 using Construct.Components;
+using Construct.Model;
 using Construct.Services;
 using Construct.Views;
-using Construct.Model;
+using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace Construct.Systems {
     sealed class LoadConventusSystem : IEcsRunSystem {
@@ -16,8 +16,9 @@ namespace Construct.Systems {
         private readonly EcsPool<Singula> _singulaPool;
 
         private readonly Material _greenOutline;
+        private readonly int _singulaLayer;
 
-        public LoadConventusSystem(EcsWorld world, IDbController controller) {
+        public LoadConventusSystem(EcsWorld world, LayerMask singulaLayer, IDbController controller) {
             _world = world;
             _controller = controller;
             _loadConventusFilter = _world.Filter<LoadConventus>().End();
@@ -26,10 +27,10 @@ namespace Construct.Systems {
             _singulaPool = _world.GetPool<Singula>();
 
             _greenOutline = Resources.Load<Material>($"Materials/GreenOutline");
+            _singulaLayer = (int)Mathf.Log(singulaLayer, 2);
         }
 
-        public void Run(IEcsSystems systems)
-        {
+        public void Run(IEcsSystems systems) {
             foreach (var entity in _loadConventusFilter) {
                 ref var loadConventus = ref _loadConventusPool.Get(entity);
                 var loadedConventus = _controller.DonwloadConventus(loadConventus.Id);
@@ -38,13 +39,15 @@ namespace Construct.Systems {
                 conventus.Id = loadedConventus.conventus_id;
                 conventus.Name = loadedConventus.conventus_name;
                 conventus.Joins = loadedConventus.joins
-                    .Select(joinDto => new Join() {
-                        Id = joinDto.join_id,
-                        NextJoinIds = joinDto.next_join_ids,
-                        PreviousJoinIds = joinDto.previous_join_ids,
-                        Position = joinDto.position
-                    })
-                    .ToArray();
+                    .ToDictionary(
+                        joinDto => joinDto.join_id,
+                        joinDto => new Join() {
+                            Id = joinDto.join_id,
+                            NextJoinIds = joinDto.next_join_ids,
+                            PreviousJoinIds = joinDto.previous_join_ids,
+                            Position = joinDto.position
+                        }
+                    );
                 
                 foreach (var singulaDto in loadedConventus.singulas) {
                     var singulaEntity = _world.NewEntity();
@@ -55,6 +58,7 @@ namespace Construct.Systems {
                         singulaDto.position,
                         Quaternion.identity);
 
+                    singulaObject.layer = _singulaLayer;
                     singulaObject.AddComponent<MeshCollider>().convex = true;
                     singulaObject.AddComponent<Rigidbody>();
                     
@@ -64,13 +68,15 @@ namespace Construct.Systems {
                     singula.SingulaView.Name = singulaDto.name;
                     singula.SingulaView.Joins = loadedConventus.joins
                         .Where(join => singulaDto.joins.Contains(join.join_id))
-                        .Select(join => new Join() {
-                            Id = join.join_id,
-                            Position = join.position,
-                            PreviousJoinIds = join.previous_join_ids,
-                            NextJoinIds = join.next_join_ids
-                        })
-                        .ToArray();
+                        .ToDictionary(
+                            join => join.join_id,
+                            join => new Join() {
+                                Id = join.join_id,
+                                Position = join.position,
+                                PreviousJoinIds = join.previous_join_ids,
+                                NextJoinIds = join.next_join_ids
+                            }
+                        );
 
                     singula.ConventusEcsEntity = entity;
 

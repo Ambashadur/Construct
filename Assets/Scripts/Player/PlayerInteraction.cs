@@ -1,18 +1,18 @@
+using Construct;
+using Construct.Components;
+using Construct.Views;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Construct;
-using Construct.Views;
-using Construct.Components;
 
 namespace Player {
     public class PlayerInteraction : PlayerConnection {
         [SerializeField] private Transform _playerCamera;
-        [SerializeField] private float _distance = 100.0f;
+        [SerializeField] private float _distance = 75.0f;
+        [SerializeField] private LayerMask _singulaLayer;
         [SerializeField] private float _distanceToSingula = 2.5f;
         [SerializeField] private float _throwImpulseStrength = 10.0f;
 
         private bool _isDrag = false;
-        private float _singulaAngle;
         private Transform _singulaTransform;
         private Rigidbody _singulaRigidbody;
         private SingulaView _singulaView;
@@ -33,7 +33,9 @@ namespace Player {
             var center = new Vector3(Screen.width / 2, Screen.width / 2, 0);
             var ray = new Ray(_playerCamera.position, _playerCamera.forward);
 
-            if (Physics.Raycast(ray, out var hit, _distance) && hit.transform.TryGetComponent<SingulaView>(out var singulaView)) {
+            if (Physics.Raycast(ray, out var hit, _distance, _singulaLayer)) {
+                var singulaView = hit.transform.GetComponent<SingulaView>();
+
                 if (_singulaView == null) {
                     _singulaView = singulaView;
                     World.GetPool<StartFocus>().Add(_singulaView.EcsEntity);
@@ -57,7 +59,7 @@ namespace Player {
                 _singulaTransform = _singulaView.transform;
                 _singulaTransform.SetParent(transform);
 
-                World.GetPool<InHand>().Add(_singulaView.EcsEntity);
+                World.GetPool<TakeToHand>().Add(_singulaView.EcsEntity);
             } else if (_isDrag) {
                 _isDrag = false;
 
@@ -67,7 +69,7 @@ namespace Player {
                 _singulaRigidbody.isKinematic = false;
                 _singulaRigidbody = null;
 
-                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
+                World.GetPool<ReleaseFromHand>().Add(_singulaView.EcsEntity);
             }
         }
 
@@ -82,7 +84,7 @@ namespace Player {
                 _singulaRigidbody.AddForce(_playerCamera.forward * _throwImpulseStrength, ForceMode.Impulse);
                 _singulaRigidbody = null;
                 
-                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
+                World.GetPool<ReleaseFromHand>().Add(_singulaView.EcsEntity);
             }
         }
 

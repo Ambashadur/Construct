@@ -314,6 +314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerConnection: {fileID: 856548769}
+  _singulaLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &600317642
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,7 +622,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCamera: {fileID: 963194228}
-  _distance: 100
+  _distance: 75
+  _singulaLayer:
+    serializedVersion: 2
+    m_Bits: 64
   _distanceToSingula: 2.5
   _throwImpulseStrength: 15
 --- !u!1 &963194225

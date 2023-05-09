@@ -1,59 +1,107 @@
-using System;
 using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using Leopotam.EcsLite;
 using Construct.Components;
-using Construct.Model;
+using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace Construct.Systems {
-    sealed class SingulaSystem : IEcsRunSystem {
+    public sealed class SingulaSystem : IEcsRunSystem {
         private readonly EcsWorld _world;
-        private readonly EcsFilter _filter;
+        private readonly EcsFilter _inHandSingulafilter;
+        private readonly EcsFilter _possibleJoinFilter;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<Conventus> _conventusPool;
+        private readonly EcsPool<PossibleJoin> _possibleJoinPool;
+
+        private readonly Material _greenTransparent;
+
+        private const float nearDistance = 0.75f;
+
+        private NearestJoin _nearestJoin = new();
+        private NearestJoin? _oldNearestJoin = null;
 
         public SingulaSystem(EcsWorld world) {
             _world = world;
-            _filter = _world.Filter<Singula>().End();
+            _inHandSingulafilter = _world.Filter<Singula>().Inc<InHand>().End();
+            _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
             _singulaPool = _world.GetPool<Singula>();
             _conventusPool = _world.GetPool<Conventus>();
+            _possibleJoinPool = _world.GetPool<PossibleJoin>();
+
+            _greenTransparent = Resources.Load<Material>($"Materials/GreenTransparent");
         }
 
         public void Run(IEcsSystems systems) {
-            var positions = new Dictionary<int, JoinPosition>();
-
-            foreach (var entity in _filter) {
+            foreach (var entity in _inHandSingulafilter) {
                 ref var singula = ref _singulaPool.Get(entity);
-                ref var conventus = ref _conventusPool.Get(singula.ConventusEcsEntity);
+                var singulaTransform = singula.SingulaView.GetComponent<Transform>();
 
-                foreach (var join in singula.SingulaView.Joins) {
-                    foreach (var nextJoin in join.NextJoinIds) {
-                        if (positions.ContainsKey(nextJoin)) {
-                            positions[nextJoin].SecondJoinId = join.Id;
-                            positions[nextJoin].SecondJoinPosition = singula.SingulaView.transform.TransformPoint(join.Position);
-                        } else {
-                            positions[nextJoin] = new JoinPosition() {
-                                FirstJoinId = join.Id,
-                                FirstJoinPosition = singula.SingulaView.transform.TransformPoint(join.Position)
-                            };
+                _nearestJoin.Distance = float.MaxValue;
+                var joinPositions = singula.SingulaView.Joins.ToDictionary(
+                    kv => kv.Key,
+                    kv => singulaTransform.TransformPoint(kv.Value.Position)
+                );
+
+                foreach (var possibleJoinEntity in _possibleJoinFilter) {
+                    ref var possibleJoinSingula = ref _singulaPool.Get(possibleJoinEntity);
+                    ref var possibleJoin = ref _possibleJoinPool.Get(possibleJoinEntity);
+                    var possibleJoinSingulaTransform = possibleJoinSingula.SingulaView.GetComponent<Transform>();
+
+                    foreach (var kv in possibleJoin.JoinPairs) {
+                        var distance = Vector3.Distance(
+                            joinPositions[kv.Value],
+                            possibleJoinSingulaTransform.TransformPoint(possibleJoinSingula.SingulaView.Joins[kv.Key].Position)
+                        );
+
+                        if (distance <= _nearestJoin.Distance) {
+                            _nearestJoin.Distance = distance;
+                            _nearestJoin.JoinId = kv.Value;
+                            _nearestJoin.NearJoinId = kv.Key;
+                            _nearestJoin.NearEcsEntity = possibleJoinEntity;
                         }
                     }
                 }
-            }
 
-            foreach (var kv in positions) {
-                if (Vector3.Distance(kv.Value.FirstJoinPosition, kv.Value.SecondJoinPosition) <= 1.0f) {
-                    Debug.Log($"{kv.Value.FirstJoinId} and {kv.Value.SecondJoinId} are near!");
+                if (_oldNearestJoin.HasValue 
+                    && (_nearestJoin.NearJoinId != _oldNearestJoin.Value.NearJoinId || _nearestJoin.Distance > nearDistance)) {
+                    ref var oldPossibleJoin = ref _possibleJoinPool.Get(_oldNearestJoin.Value.NearEcsEntity);
+                    oldPossibleJoin.JoinIdSingulaFrame = -1;
+                    GameObject.Destroy(oldPossibleJoin.SingulaFrame);
+
+                    _oldNearestJoin = null;
+                }
+
+                // Если расстояние меньше заданного и после предыдущего условия стаорое ближайшее соединение
+                // не заданно, то создаем вспомагательную модель для пользователя, привязывая её к
+                // текущей ближайшей детали.
+                if (_nearestJoin.Distance <= nearDistance && !_oldNearestJoin.HasValue) {
+                    ref var possibleJoin = ref _possibleJoinPool.Get(_nearestJoin.NearEcsEntity);
+                    ref var possibleJoinSingula = ref _singulaPool.Get(_nearestJoin.NearEcsEntity);
+                    var singulaFrameObject = new GameObject("Singla Frame");
+                    singulaFrameObject.AddComponent<MeshRenderer>().material = _greenTransparent;
+                    singulaFrameObject.AddComponent<MeshFilter>().mesh = singula.SingulaView.GetComponent<MeshFilter>().mesh;
+
+                    var singulaFrameTransform = singulaFrameObject.GetComponent<Transform>();
+                    var possibleJoinSingulaTransform = possibleJoinSingula.SingulaView.GetComponent<Transform>();
+
+                    singulaFrameTransform.rotation = possibleJoinSingulaTransform.rotation;
+                    singulaFrameTransform.position = possibleJoinSingulaTransform.TransformPoint(
+                        possibleJoinSingula.SingulaView.Joins[_nearestJoin.NearJoinId].Position 
+                        - singula.SingulaView.Joins[_nearestJoin.JoinId].Position);
+
+                    singulaFrameTransform.SetParent(possibleJoinSingulaTransform);
+
+                    possibleJoin.SingulaFrame = singulaFrameObject;
+                    possibleJoin.JoinIdSingulaFrame = _nearestJoin.NearJoinId;
+                    _oldNearestJoin = _nearestJoin;
                 }
             }
         }
     }
 
-    public sealed class JoinPosition {
-        public int FirstJoinId;
-        public Vector3 FirstJoinPosition;
-        public int SecondJoinId;
-        public Vector3 SecondJoinPosition;
+    internal struct NearestJoin {
+        public int JoinId;
+        public int NearJoinId;
+        public int NearEcsEntity;
+        public float Distance;
     }
 }

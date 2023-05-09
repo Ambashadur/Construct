@@ -1,3 +1,3 @@
 namespace Construct.Components {
-    struct DetachSingula { }
+    public struct DetachSingula { }
 }

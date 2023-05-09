@@ -1,3 +1,3 @@
 namespace Construct.Components {
-    public struct JoinSingula { }
+    struct TakeToHand { }
 }
