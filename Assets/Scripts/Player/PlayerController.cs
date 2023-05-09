@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Player {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInteraction))]
@@ -10,6 +11,7 @@ namespace Player {
         [SerializeField] private float _cameraXClamp = 80.0f;
         [SerializeField] private Vector3 _cameraOffset = Vector3.zero;
 
+        private bool _isRotatation;
         private BasePlayerInputActions _playerInput;
         private Transform _cachedTransform;
         private CharacterController _characterController;
@@ -34,10 +36,12 @@ namespace Player {
             _characterController = GetComponent<CharacterController>();
             _interaction = GetComponent<PlayerInteraction>();
 
-            _playerInput.FPSMap.Drag.started += _interaction.StartDrag;
-            _playerInput.FPSMap.Drag.canceled += _interaction.PerfomDrag;
+            _playerInput.FPSMap.Drag.started += _interaction.Drag;
+            _playerInput.FPSMap.Release.started += _interaction.Release;
             _playerInput.FPSMap.Join.started += _interaction.Join;
             _playerInput.FPSMap.Detach.started += _interaction.Detach;
+            _playerInput.FPSMap.Rotate.started += (InputAction.CallbackContext _) => _isRotatation = true;
+            _playerInput.FPSMap.Rotate.canceled += (InputAction.CallbackContext _) => _isRotatation = false;
 
             _playerInput.FPSMap.Download.started += _interaction.Download;
         }
@@ -45,7 +49,7 @@ namespace Player {
         private void Update() {
             var input = _playerInput.FPSMap.Movement.ReadValue<Vector2>();
 
-            if (input == Vector2.zero) return;
+            if (input == Vector2.zero || _isRotatation) return;
 
             input = Vector2.ClampMagnitude(input, _speed);
             var motion = new Vector3 {
@@ -59,6 +63,12 @@ namespace Player {
 
         private void LateUpdate() {
             var input = _playerInput.FPSMap.View.ReadValue<Vector2>();
+
+            if (_isRotatation) {
+                _interaction.RotateSingula(input);
+                return;
+            }
+
             _playerCamera.position = transform.position + _cameraOffset;
 
             var currentXRotation = _playerCamera.rotation.eulerAngles.x;

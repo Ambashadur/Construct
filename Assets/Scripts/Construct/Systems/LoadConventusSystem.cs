@@ -33,6 +33,18 @@ namespace Construct.Systems {
             foreach (var entity in _loadConventusFilter) {
                 ref var loadConventus = ref _loadConventusPool.Get(entity);
                 var loadedConventus = _controller.DonwloadConventus(loadConventus.Id);
+
+                ref var conventus = ref _conventusPool.Add(entity);
+                conventus.Id = loadedConventus.conventus_id;
+                conventus.Name = loadedConventus.conventus_name;
+                conventus.Joins = loadedConventus.joins
+                    .Select(joinDto => new Join() {
+                        Id = joinDto.join_id,
+                        NextJoinIds = joinDto.next_join_ids,
+                        PreviousJoinIds = joinDto.previous_join_ids,
+                        Position = joinDto.position
+                    })
+                    .ToArray();
                 
                 foreach (var singulaDto in loadedConventus.singulas) {
                     var singulaEntity = _world.NewEntity();
@@ -70,10 +82,6 @@ namespace Construct.Systems {
                     singulaMeshRenderer.material.SetTexture("_Texture2D", singulaTexture);
                     singulaMeshRenderer.material.SetColor("_Color", singulaColor);
                 }
-
-                ref var conventus = ref _conventusPool.Add(entity);
-                conventus.Id = loadedConventus.conventus_id;
-                conventus.Name = loadedConventus.conventus_name;
 
                 _loadConventusPool.Del(entity);
             }

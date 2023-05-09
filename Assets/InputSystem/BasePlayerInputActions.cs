@@ -80,6 +80,24 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Release"",
+                    ""type"": ""Button"",
+                    ""id"": ""64fdafcc-d4fd-419e-8b6d-8ec4ab133f45"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""8786f16f-1ffa-48c9-8ff1-c3f477fb92f5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +210,28 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""Download"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f19d74f0-d670-45e7-a7ac-08aad8da20b3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""20bd8998-395f-416b-a4ae-f9090ef53ce4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +246,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         m_FPSMap_Join = m_FPSMap.FindAction("Join", throwIfNotFound: true);
         m_FPSMap_Detach = m_FPSMap.FindAction("Detach", throwIfNotFound: true);
         m_FPSMap_Download = m_FPSMap.FindAction("Download", throwIfNotFound: true);
+        m_FPSMap_Release = m_FPSMap.FindAction("Release", throwIfNotFound: true);
+        m_FPSMap_Rotate = m_FPSMap.FindAction("Rotate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +315,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_FPSMap_Join;
     private readonly InputAction m_FPSMap_Detach;
     private readonly InputAction m_FPSMap_Download;
+    private readonly InputAction m_FPSMap_Release;
+    private readonly InputAction m_FPSMap_Rotate;
     public struct FPSMapActions
     {
         private @BasePlayerInputActions m_Wrapper;
@@ -283,6 +327,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         public InputAction @Join => m_Wrapper.m_FPSMap_Join;
         public InputAction @Detach => m_Wrapper.m_FPSMap_Detach;
         public InputAction @Download => m_Wrapper.m_FPSMap_Download;
+        public InputAction @Release => m_Wrapper.m_FPSMap_Release;
+        public InputAction @Rotate => m_Wrapper.m_FPSMap_Rotate;
         public InputActionMap Get() { return m_Wrapper.m_FPSMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -310,6 +356,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Download.started += instance.OnDownload;
             @Download.performed += instance.OnDownload;
             @Download.canceled += instance.OnDownload;
+            @Release.started += instance.OnRelease;
+            @Release.performed += instance.OnRelease;
+            @Release.canceled += instance.OnRelease;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
         }
 
         private void UnregisterCallbacks(IFPSMapActions instance)
@@ -332,6 +384,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Download.started -= instance.OnDownload;
             @Download.performed -= instance.OnDownload;
             @Download.canceled -= instance.OnDownload;
+            @Release.started -= instance.OnRelease;
+            @Release.performed -= instance.OnRelease;
+            @Release.canceled -= instance.OnRelease;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
         }
 
         public void RemoveCallbacks(IFPSMapActions instance)
@@ -357,5 +415,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         void OnJoin(InputAction.CallbackContext context);
         void OnDetach(InputAction.CallbackContext context);
         void OnDownload(InputAction.CallbackContext context);
+        void OnRelease(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
     }
 }

@@ -8,10 +8,12 @@ namespace Player {
     public class PlayerInteraction : PlayerConnection {
         [SerializeField] private Transform _playerCamera;
         [SerializeField] private float _distance = 100.0f;
+        [SerializeField] private float _distanceToSingula = 2.5f;
+        [SerializeField] private float _throwImpulseStrength = 10.0f;
 
         private bool _isDrag = false;
-        private float _distanceToSingula;
-        private Transform _singulaPosition;
+        private float _singulaAngle;
+        private Transform _singulaTransform;
         private Rigidbody _singulaRigidbody;
         private SingulaView _singulaView;
 
@@ -24,8 +26,7 @@ namespace Player {
         private void Update() {
             if (_isDrag) {
                 var direction = _playerCamera.position + _playerCamera.forward * _distanceToSingula;
-                _singulaPosition.Translate(direction - _singulaPosition.position, Space.World);
-
+                _singulaTransform.Translate(direction - _singulaTransform.position, Space.World);
                 return;
             }
 
@@ -47,19 +48,50 @@ namespace Player {
             }
         }
 
-        public void StartDrag(InputAction.CallbackContext context) {
-            if (_singulaView != null) {
+        public void Drag(InputAction.CallbackContext context) {
+            if (_singulaView != null && !_isDrag) {
                 _singulaRigidbody = _singulaView.GetComponent<Rigidbody>();
                 _singulaRigidbody.isKinematic = true;
-
                 _isDrag = true;
-                _singulaPosition = _singulaView.transform;
-                _distanceToSingula = Vector3.Distance(_singulaPosition.position, _playerCamera.position);
+
+                _singulaTransform = _singulaView.transform;
+                _singulaTransform.SetParent(transform);
+
                 World.GetPool<InHand>().Add(_singulaView.EcsEntity);
+            } else if (_isDrag) {
+                _isDrag = false;
+
+                _singulaTransform.SetParent(null);
+                _singulaTransform = null;
+
+                _singulaRigidbody.isKinematic = false;
+                _singulaRigidbody = null;
+
+                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
             }
         }
 
-        public void PerfomDrag(InputAction.CallbackContext context) => EndDrag();
+        public void Release(InputAction.CallbackContext context) {
+            if (_isDrag) {
+                _isDrag = false;
+
+                _singulaTransform.SetParent(null);
+                _singulaTransform = null;
+
+                _singulaRigidbody.isKinematic = false;
+                _singulaRigidbody.AddForce(_playerCamera.forward * _throwImpulseStrength, ForceMode.Impulse);
+                _singulaRigidbody = null;
+                
+                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
+            }
+        }
+
+        public void RotateSingula(Vector2 input) {
+            if (!_isDrag) return;
+
+            _singulaTransform.Rotate(Vector3.up, -input.x, Space.World);
+            _singulaTransform.Rotate(Vector3.right, input.y, Space.World);
+        }
 
         public void Join(InputAction.CallbackContext context) {
             
@@ -67,16 +99,6 @@ namespace Player {
 
         public void Detach(InputAction.CallbackContext context) {
             
-        }
-
-        private void EndDrag() {
-            if (_isDrag) {
-                _isDrag = false;
-                _singulaPosition = null;
-                _singulaRigidbody.isKinematic = false;
-                _singulaRigidbody = null;
-                World.GetPool<InHand>().Del(_singulaView.EcsEntity);
-            }
         }
     }
 }
