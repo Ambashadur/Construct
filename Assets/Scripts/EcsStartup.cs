@@ -8,7 +8,7 @@ namespace Construct {
         [SerializeField] private PlayerConnection _playerConnection;
         [SerializeField] private LayerMask _singulaLayer;
 
-        EcsWorld _world;        
+        EcsWorld _world;
         IEcsSystems _systems;
 
         void Start () {

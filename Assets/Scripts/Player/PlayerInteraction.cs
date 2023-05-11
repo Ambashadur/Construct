@@ -17,7 +17,7 @@ namespace Player {
         private Rigidbody _singulaRigidbody;
         private SingulaView _singulaView;
 
-        public void Download(InputAction.CallbackContext context) {
+        public void Download(InputAction.CallbackContext _) {
             var conventusEntity = World.NewEntity();
             ref var loadConventus = ref World.GetPool<LoadConventus>().Add(conventusEntity);
             loadConventus.Id = 1;
@@ -50,7 +50,7 @@ namespace Player {
             }
         }
 
-        public void Drag(InputAction.CallbackContext context) {
+        public void Drag(InputAction.CallbackContext _) {
             if (_singulaView != null && !_isDrag) {
                 _singulaRigidbody = _singulaView.GetComponent<Rigidbody>();
                 _singulaRigidbody.isKinematic = true;
@@ -73,7 +73,7 @@ namespace Player {
             }
         }
 
-        public void Release(InputAction.CallbackContext context) {
+        public void Release(InputAction.CallbackContext _) {
             if (_isDrag) {
                 _isDrag = false;
 
@@ -95,11 +95,13 @@ namespace Player {
             _singulaTransform.Rotate(Vector3.right, input.y, Space.World);
         }
 
-        public void Join(InputAction.CallbackContext context) {
-            
+        public void Join(InputAction.CallbackContext _) {
+            if (!_isDrag) return;
+
+            World.GetPool<JoinSingula>().Add(_singulaView.EcsEntity);
         }
 
-        public void Detach(InputAction.CallbackContext context) {
+        public void Detach(InputAction.CallbackContext _) {
             
         }
     }

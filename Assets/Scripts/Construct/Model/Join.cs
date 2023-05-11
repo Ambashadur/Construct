@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace Construct.Model {
     [Serializable]
-    public struct Join {
+    public sealed class Join {
         public int Id;
         public Vector3 Position;
+        public bool IsTaken;
         public int[] PreviousJoinIds;
         public int[] NextJoinIds; 
     }

@@ -14,7 +14,7 @@ namespace Construct.Systems {
         public ReleaseFromHandSystem(EcsWorld world) {
             _world = world;
             _releaseFromHandFilter = _world.Filter<Singula>().Inc<ReleaseFromHand>().End();
-            _possibleJoinFilter = _world.Filter<Singula>().Exc<ReleaseFromHand>().End();
+            _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
             _releaseFromHand = _world.GetPool<ReleaseFromHand>();
             _possibleJoinPool = _world.GetPool<PossibleJoin>();
             _inHandPool = _world.GetPool<InHand>();

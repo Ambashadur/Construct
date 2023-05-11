@@ -48,7 +48,7 @@ namespace Construct.Systems {
                 }
 
                 _endFocusPool.Add(entity);
-                _inHandPool.Add(entity);
+                _inHandPool.Add(entity).PossibleJoinEcsEntity = -1;
                 _takeToHandPool.Del(entity);
             }
         }

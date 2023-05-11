@@ -181,7 +181,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""f92b566d-332f-46ef-b27b-5c7675396555"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

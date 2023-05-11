@@ -9,8 +9,8 @@ namespace Construct.Systems {
         private readonly EcsFilter _inHandSingulafilter;
         private readonly EcsFilter _possibleJoinFilter;
         private readonly EcsPool<Singula> _singulaPool;
-        private readonly EcsPool<Conventus> _conventusPool;
         private readonly EcsPool<PossibleJoin> _possibleJoinPool;
+        private readonly EcsPool<InHand> _inHandPool;
 
         private readonly Material _greenTransparent;
 
@@ -24,15 +24,21 @@ namespace Construct.Systems {
             _inHandSingulafilter = _world.Filter<Singula>().Inc<InHand>().End();
             _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
             _singulaPool = _world.GetPool<Singula>();
-            _conventusPool = _world.GetPool<Conventus>();
             _possibleJoinPool = _world.GetPool<PossibleJoin>();
+            _inHandPool = _world.GetPool<InHand>();
 
             _greenTransparent = Resources.Load<Material>($"Materials/GreenTransparent");
         }
 
         public void Run(IEcsSystems systems) {
+            if (_inHandSingulafilter.GetEntitiesCount() == 0) {
+                _oldNearestJoin = null;
+                return;
+            }
+
             foreach (var entity in _inHandSingulafilter) {
                 ref var singula = ref _singulaPool.Get(entity);
+                ref var inHand = ref _inHandPool.Get(entity);
                 var singulaTransform = singula.SingulaView.GetComponent<Transform>();
 
                 _nearestJoin.Distance = float.MaxValue;
@@ -67,6 +73,7 @@ namespace Construct.Systems {
                     oldPossibleJoin.JoinIdSingulaFrame = -1;
                     GameObject.Destroy(oldPossibleJoin.SingulaFrame);
 
+                    inHand.PossibleJoinEcsEntity = -1;
                     _oldNearestJoin = null;
                 }
 
@@ -92,6 +99,7 @@ namespace Construct.Systems {
 
                     possibleJoin.SingulaFrame = singulaFrameObject;
                     possibleJoin.JoinIdSingulaFrame = _nearestJoin.NearJoinId;
+                    inHand.PossibleJoinEcsEntity = _nearestJoin.NearEcsEntity;
                     _oldNearestJoin = _nearestJoin;
                 }
             }
