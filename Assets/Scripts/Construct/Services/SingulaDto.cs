@@ -8,6 +8,6 @@ namespace Construct.Services {
         public int singula_id;
         public string model;
         public Vector3 position;
-        public int[] joins;
+        public PimpleDto[] pimples;
     }
 }

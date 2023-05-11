@@ -38,14 +38,19 @@ namespace Construct.Systems {
                 ref var conventus = ref _conventusPool.Add(entity);
                 conventus.Id = loadedConventus.conventus_id;
                 conventus.Name = loadedConventus.conventus_name;
+
+                // TODO: Сделать автоматический рассчет в каких соединениях какие детали будут
+                // сделать это не трудно, нужно пройти по всех иерархии, и собрать все детали.
                 conventus.Joins = loadedConventus.joins
                     .ToDictionary(
                         joinDto => joinDto.join_id,
                         joinDto => new Join() {
                             Id = joinDto.join_id,
                             NextJoinIds = joinDto.next_join_ids,
-                            PreviousJoinIds = joinDto.previous_join_ids,
-                            Position = joinDto.position
+                            LeftJoinId = joinDto.left_join_id,
+                            LeftPimples = joinDto.left_pimples,
+                            RightJoinId = joinDto.right_join_id,
+                            RightPimples = joinDto.right_pimples
                         }
                     );
                 
@@ -66,17 +71,14 @@ namespace Construct.Systems {
                     singula.SingulaView.EcsEntity = singulaEntity;
                     singula.SingulaView.Id = singulaDto.singula_id;
                     singula.SingulaView.Name = singulaDto.name;
-                    singula.SingulaView.Joins = loadedConventus.joins
-                        .Where(join => singulaDto.joins.Contains(join.join_id))
-                        .ToDictionary(
-                            join => join.join_id,
-                            join => new Join() {
-                                Id = join.join_id,
-                                Position = join.position,
-                                PreviousJoinIds = join.previous_join_ids,
-                                NextJoinIds = join.next_join_ids
-                            }
-                        );
+                    singula.SingulaView.Pimples = singulaDto.pimples.ToDictionary(
+                        pimpleDto => pimpleDto.id,
+                        pimpleDto => new Pimple()
+                        {
+                            Id = pimpleDto.id,
+                            Position = pimpleDto.position,
+                            JoinId = pimpleDto.join_id,
+                        });
 
                     singula.ConventusEcsEntity = entity;
 

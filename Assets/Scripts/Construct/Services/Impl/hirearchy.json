@@ -11,7 +11,17 @@
                 "y": 1.5,
                 "z": 0
             },
-            "joins": [ 1 ]
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": 0.1325,
+                        "y": 0.4575,
+                        "z": 0
+                    },
+                    "join_id": 1
+                }
+            ]
         },
         {
             "name": "piston",
@@ -22,7 +32,17 @@
                 "y": 1.5,
                 "z": 0
             },
-            "joins": [ 2 ]
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": 0,
+                        "y": -0.1,
+                        "z": 0
+                    },
+                    "join_id": 2
+                }
+            ]
         },
         {
             "name": "wrist-pin",
@@ -33,59 +53,107 @@
                 "y": 1.5,
                 "z": 0
             },
-            "joins": [ 3 ]
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "join_id": 3
+                }
+            ]
         }
     ],
     "joins": [
         {
             "join_id": 1,
-            "position": {
-                "x": 0.1325,
-                "y": 0.4575,
-                "z": 0
-            },
-            "next_join_ids": [ 4, 5 ],
-            "previous_join_ids": [ ]
+            "next_join_ids": [ 4, 5 ]
         },
         {
             "join_id": 2,
-            "position": {
-                "x": 0,
-                "y": -0.1,
-                "z": 0
-            },
-            "next_join_ids": [ 4, 6 ],
-            "previous_join_ids": [ ]
+            "next_join_ids": [ 4, 6 ]
         },
         {
             "join_id": 3,
-            "position": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "next_join_ids": [ 5, 6, 7 ],
-            "previous_join_ids": [ ]
+            "next_join_ids": [ 5, 6, 7 ]
         },
         {
             "join_id": 4,
             "next_join_ids": [ 7 ],
-            "previous_join_ids": [ 1, 2 ]
+            "left_join_id": 1,
+            "left_pimples": [
+                {
+                    "singula_id": 2,
+                    "pimple_id": 1
+                }
+            ],
+            "right_join_id": 2,
+            "right_pimples": [
+                {
+                    "singula_id": 9,
+                    "pimple_id": 1
+                }
+            ]
         },
         {
             "join_id": 5,
-            "next_join_ids": [ ],
-            "previous_join_ids": [ 1, 3 ]
+            "next_join_ids": [],
+            "left_join_id": 1,
+            "left_pimples": [
+                {
+                    "singula_id": 2,
+                    "pimple_id": 1
+                }
+            ],
+            "right_join_id": 3,
+            "right_pimples": [
+                {
+                    "singula_id": 15,
+                    "pimple_id": 1
+                }
+            ]
         },
         {
             "join_id": 6,
-            "next_join_ids": [ ],
-            "previous_join_ids": [ 2, 3 ]
+            "next_join_ids": [],
+            "left_join_id": 2,
+            "left_pimples": [
+                {
+                    "singula_id": 9,
+                    "pimple_id": 1
+                }
+            ],
+            "right_join_id": 3,
+            "right_pimples": [
+                {
+                    "singula_id": 15,
+                    "pimple_id": 1
+                }
+            ]
         },
         {
             "join_id": 7,
-            "next_join_ids": [ ],
-            "previous_join_ids": [ 3, 4 ]
+            "next_join_ids": [],
+            "left_join_id": 3,
+            "left_pimples": [
+                {
+                    "singula_id": 15,
+                    "pimple_id": 1
+                }
+            ],
+            "right_join_id": 4,
+            "right_pimples": [
+                {
+                    "singula_id": 2,
+                    "pimple_id": 1
+                },
+                {
+                    "singula_id": 9,
+                    "pimple_id": 1
+                }
+            ]
         }
     ]
 }

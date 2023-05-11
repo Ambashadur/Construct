@@ -18,7 +18,7 @@ namespace Construct.Editors {
 
             EditorGUILayout.Separator();
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Joins"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Pimples"));
 
             EditorGUILayout.Separator();
 
@@ -28,7 +28,7 @@ namespace Construct.Editors {
         private void OnSceneGUI() {
             Handles.color = Color.green;
 
-            foreach (var kv in _singulaTarget.Joins) {
+            foreach (var kv in _singulaTarget.Pimples) {
                 EditorGUI.BeginChangeCheck();
                 var position = _singulaTarget.transform.TransformPoint(kv.Value.Position);
 
@@ -43,7 +43,7 @@ namespace Construct.Editors {
                     Undo.RecordObject(_singulaTarget, "Change leg vertex position");
                     var value = kv.Value;
                     value.Position = _singulaTarget.transform.InverseTransformPoint(newPosition);
-                    _singulaTarget.Joins[kv.Key] = value;
+                    _singulaTarget.Pimples[kv.Key] = value;
                     serializedObject.Update();
                 }
             }

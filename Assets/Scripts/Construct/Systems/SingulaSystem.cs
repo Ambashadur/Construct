@@ -3,8 +3,10 @@ using Construct.Components;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Construct.Systems {
-    public sealed class SingulaSystem : IEcsRunSystem {
+namespace Construct.Systems
+{
+    public sealed class SingulaSystem : IEcsRunSystem
+    {
         private readonly EcsWorld _world;
         private readonly EcsFilter _inHandSingulafilter;
         private readonly EcsFilter _possibleJoinFilter;
@@ -19,7 +21,8 @@ namespace Construct.Systems {
         private NearestJoin _nearestJoin = new();
         private NearestJoin? _oldNearestJoin = null;
 
-        public SingulaSystem(EcsWorld world) {
+        public SingulaSystem(EcsWorld world)
+        {
             _world = world;
             _inHandSingulafilter = _world.Filter<Singula>().Inc<InHand>().End();
             _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
@@ -30,7 +33,8 @@ namespace Construct.Systems {
             _greenTransparent = Resources.Load<Material>($"Materials/GreenTransparent");
         }
 
-        public void Run(IEcsSystems systems) {
+        public void Run(IEcsSystems systems)
+        {
             if (_inHandSingulafilter.GetEntitiesCount() == 0) {
                 _oldNearestJoin = null;
                 return;
@@ -52,7 +56,7 @@ namespace Construct.Systems {
                     ref var possibleJoin = ref _possibleJoinPool.Get(possibleJoinEntity);
                     var possibleJoinSingulaTransform = possibleJoinSingula.SingulaView.GetComponent<Transform>();
 
-                    foreach (var kv in possibleJoin.JoinPairs) {
+                    foreach (var kv in possibleJoin.PimplePairs) {
                         var distance = Vector3.Distance(
                             joinPositions[kv.Value],
                             possibleJoinSingulaTransform.TransformPoint(possibleJoinSingula.SingulaView.Joins[kv.Key].Position)
@@ -70,7 +74,7 @@ namespace Construct.Systems {
                 if (_oldNearestJoin.HasValue 
                     && (_nearestJoin.NearJoinId != _oldNearestJoin.Value.NearJoinId || _nearestJoin.Distance > nearDistance)) {
                     ref var oldPossibleJoin = ref _possibleJoinPool.Get(_oldNearestJoin.Value.NearEcsEntity);
-                    oldPossibleJoin.JoinIdSingulaFrame = -1;
+                    oldPossibleJoin.PimpleIdSingulaFrame = -1;
                     GameObject.Destroy(oldPossibleJoin.SingulaFrame);
 
                     inHand.PossibleJoinEcsEntity = -1;
@@ -98,7 +102,7 @@ namespace Construct.Systems {
                     singulaFrameTransform.SetParent(possibleJoinSingulaTransform);
 
                     possibleJoin.SingulaFrame = singulaFrameObject;
-                    possibleJoin.JoinIdSingulaFrame = _nearestJoin.NearJoinId;
+                    possibleJoin.PimpleIdSingulaFrame = _nearestJoin.NearJoinId;
                     inHand.PossibleJoinEcsEntity = _nearestJoin.NearEcsEntity;
                     _oldNearestJoin = _nearestJoin;
                 }
@@ -106,7 +110,8 @@ namespace Construct.Systems {
         }
     }
 
-    internal struct NearestJoin {
+    internal struct NearestJoin
+    {
         public int JoinId;
         public int NearJoinId;
         public int NearEcsEntity;

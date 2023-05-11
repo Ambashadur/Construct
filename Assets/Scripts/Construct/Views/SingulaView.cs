@@ -8,6 +8,6 @@ namespace Construct.Views {
         [ReadOnly] public int Id;
         [ReadOnly] public string Name;
         [ReadOnly] public int EcsEntity;
-        [ReadOnly] public Dictionary<int, Join> Joins = new();
+        [ReadOnly] public Dictionary<int, Pimple> Pimples = new();
     }
 }

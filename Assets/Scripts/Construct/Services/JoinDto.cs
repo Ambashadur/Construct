@@ -1,12 +1,14 @@
 using System;
-using UnityEngine;
+using Construct.Model;
 
 namespace Construct.Services {
     [Serializable]
     public class JoinDto {
         public int join_id;
-        public Vector3 position;
         public int[] next_join_ids;
-        public int[] previous_join_ids;
+        public int left_join_id;
+        public SingulaJoin[] left_pimples;
+        public int right_join_id;
+        public SingulaJoin[] right_pimples;
     }
 }

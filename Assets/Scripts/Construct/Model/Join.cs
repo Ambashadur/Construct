@@ -1,13 +1,19 @@
 using System;
-using UnityEngine;
 
 namespace Construct.Model {
     [Serializable]
     public sealed class Join {
         public int Id;
-        public Vector3 Position;
-        public bool IsTaken;
-        public int[] PreviousJoinIds;
-        public int[] NextJoinIds; 
+        public int[] NextJoinIds;
+        public int LeftJoinId;
+        public SingulaJoin[] LeftPimples;
+        public int RightJoinId;
+        public SingulaJoin[] RightPimples;
+    }
+
+    [Serializable]
+    public struct SingulaJoin {
+        public int SingulaId;
+        public int PimpleId;
     }
 }

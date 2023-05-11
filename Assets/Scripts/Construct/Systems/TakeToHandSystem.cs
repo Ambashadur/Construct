@@ -3,7 +3,6 @@ using System.Linq;
 using Construct.Components;
 using Construct.Model;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace Construct.Systems {
     public sealed class TakeToHandSystem : IEcsRunSystem {
@@ -15,6 +14,7 @@ namespace Construct.Systems {
         private readonly EcsPool<InHand> _inHandPool;
         private readonly EcsPool<PossibleJoin> _possibleJoinPool;
         private readonly EcsPool<EndFocus> _endFocusPool;
+        private readonly EcsPool<Conventus> _conventusPool;
 
         public TakeToHandSystem(EcsWorld world) {
             _world = world;
@@ -25,23 +25,26 @@ namespace Construct.Systems {
             _inHandPool = _world.GetPool<InHand>();
             _possibleJoinPool = _world.GetPool<PossibleJoin>();
             _endFocusPool = _world.GetPool<EndFocus>();
+            _conventusPool = _world.GetPool<Conventus>();
         }
 
         public void Run (IEcsSystems systems) {
             foreach (var entity in _takeToHandFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
-                GetNextJoinPairs(singula.SingulaView.Joins, out var nextJoinPairs);
+                ref var conventus = ref _conventusPool.Get(entity);
+
+                GetNextJoinPairs(singula.SingulaView.Pimples, conventus, out var nextJoinPairs);
 
                 foreach (var otherEntity in _otherSingulaFilter) {
                     ref var otherSingula = ref _singulaPool.Get(otherEntity);
-                    GetNextJoinPairs(otherSingula.SingulaView.Joins, out var otherNextJoinPairs);
+                    GetNextJoinPairs(otherSingula.SingulaView.Pimples, conventus, out var otherNextJoinPairs);
                     var commonNextJoinIds = nextJoinPairs.Keys.Intersect(otherNextJoinPairs.Keys);
 
                     if (commonNextJoinIds.Count() > 0) {
                         ref var possibleJoin = ref _possibleJoinPool.Add(otherEntity);
-                        possibleJoin.JoinIdSingulaFrame = -1;
+                        possibleJoin.PimpleIdSingulaFrame = -1;
                         possibleJoin.SingulaFrame = null;
-                        possibleJoin.JoinPairs = commonNextJoinIds.ToDictionary(
+                        possibleJoin.PimplePairs = commonNextJoinIds.ToDictionary(
                             nextJoinId => otherNextJoinPairs[nextJoinId],
                             nextJoinId => nextJoinPairs[nextJoinId]);
                     }
@@ -53,12 +56,22 @@ namespace Construct.Systems {
             }
         }
 
-        private void GetNextJoinPairs(Dictionary<int, Join> joins, out Dictionary<int, int> result) {
+        /// <summary>
+        /// Создаёт словарь содержащий уникальный идентификатор следующего <see cref="Join">Join</see> и <see cref="Pimple">Pimple</see>
+        /// </summary>
+        /// <param name="pimples"></param>
+        /// <param name="conventus"></param>
+        /// <param name="result"></param>
+        private void GetNextJoinPairs(
+            in Dictionary<int, Pimple> pimples,
+            in Conventus conventus,
+            out Dictionary<int, int> result)
+        {
             result = new Dictionary<int, int>();
 
-            foreach (var join in joins) {
-                foreach (var nextJoinId in join.Value.NextJoinIds) {
-                    result[nextJoinId] = join.Value.Id;
+            foreach (var pimple in pimples) {
+                foreach (var nextJoinId in conventus.Joins[pimple.Value.JoinId].NextJoinIds) {
+                    result[nextJoinId] = pimple.Value.Id;
                 }
             }
         }
