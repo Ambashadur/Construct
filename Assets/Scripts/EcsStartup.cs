@@ -16,13 +16,13 @@ namespace Construct {
             _playerConnection.World = _world;
             _systems = new EcsSystems (_world);
             _systems
+                .Add(new SingulaSystem(_world))
+                .Add(new JoinSingulaSystem(_world))
+                .Add(new DetachSingulaSystem(_world))
                 .Add(new ReleaseFromHandSystem(_world))
                 .Add(new TakeToHandSystem(_world))
                 .Add(new EndFocusSystem(_world))
                 .Add(new StartFocusSystem(_world))
-                .Add(new SingulaSystem(_world))
-                .Add(new JoinSingulaSystem(_world))
-                .Add(new DetachSingulaSystem(_world))
                 .Add(new LoadConventusSystem(_world, _singulaLayer, new DbController()))
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())

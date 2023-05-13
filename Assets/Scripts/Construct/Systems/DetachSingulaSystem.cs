@@ -2,21 +2,25 @@ using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
 
-namespace Construct.Systems {
-    sealed class DetachSingulaSystem : IEcsRunSystem {    
+namespace Construct.Systems
+{
+    public sealed class DetachSingulaSystem : IEcsRunSystem
+    {
         private readonly EcsWorld _world;
         private readonly EcsFilter _singulaDetachFilter;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<DetachSingula> _detachSingulaPool;
 
-        public DetachSingulaSystem(EcsWorld world) {
+        public DetachSingulaSystem(EcsWorld world)
+        {
             _world = world;
             _singulaDetachFilter = _world.Filter<DetachSingula>().Inc<Singula>().End();
             _singulaPool = _world.GetPool<Singula>();
             _detachSingulaPool = _world.GetPool<DetachSingula>();
         }
 
-        public void Run (IEcsSystems systems) {
+        public void Run (IEcsSystems systems)
+        {
             foreach (var entity in _singulaDetachFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
 

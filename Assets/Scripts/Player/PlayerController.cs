@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player {
+namespace Player
+{
     [RequireComponent(typeof(CharacterController), typeof(PlayerInteraction))]
-    public class PlayerController : MonoBehaviour {
+    public sealed class PlayerController : MonoBehaviour
+    {
         [SerializeField] private Transform _playerCamera;
         [SerializeField] private float _speed = 5.0f;
         [SerializeField] private float _mouseXSensivity = 80.0f;

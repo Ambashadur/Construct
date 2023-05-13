@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Construct.Model {
     [Serializable]
@@ -6,9 +7,9 @@ namespace Construct.Model {
         public int Id;
         public int[] NextJoinIds;
         public int LeftJoinId;
-        public SingulaJoin[] LeftPimples;
+        public List<SingulaJoin> LeftPimples;
         public int RightJoinId;
-        public SingulaJoin[] RightPimples;
+        public List<SingulaJoin> RightPimples;
     }
 
     [Serializable]

@@ -83,77 +83,25 @@
             "join_id": 4,
             "next_join_ids": [ 7 ],
             "left_join_id": 1,
-            "left_pimples": [
-                {
-                    "singula_id": 2,
-                    "pimple_id": 1
-                }
-            ],
-            "right_join_id": 2,
-            "right_pimples": [
-                {
-                    "singula_id": 9,
-                    "pimple_id": 1
-                }
-            ]
+            "right_join_id": 2
         },
         {
             "join_id": 5,
             "next_join_ids": [],
             "left_join_id": 1,
-            "left_pimples": [
-                {
-                    "singula_id": 2,
-                    "pimple_id": 1
-                }
-            ],
-            "right_join_id": 3,
-            "right_pimples": [
-                {
-                    "singula_id": 15,
-                    "pimple_id": 1
-                }
-            ]
+            "right_join_id": 3
         },
         {
             "join_id": 6,
             "next_join_ids": [],
             "left_join_id": 2,
-            "left_pimples": [
-                {
-                    "singula_id": 9,
-                    "pimple_id": 1
-                }
-            ],
-            "right_join_id": 3,
-            "right_pimples": [
-                {
-                    "singula_id": 15,
-                    "pimple_id": 1
-                }
-            ]
+            "right_join_id": 3
         },
         {
             "join_id": 7,
             "next_join_ids": [],
             "left_join_id": 3,
-            "left_pimples": [
-                {
-                    "singula_id": 15,
-                    "pimple_id": 1
-                }
-            ],
-            "right_join_id": 4,
-            "right_pimples": [
-                {
-                    "singula_id": 2,
-                    "pimple_id": 1
-                },
-                {
-                    "singula_id": 9,
-                    "pimple_id": 1
-                }
-            ]
+            "right_join_id": 4
         }
     ]
 }

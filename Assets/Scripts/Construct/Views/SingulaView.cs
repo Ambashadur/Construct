@@ -1,13 +1,9 @@
-using System.Collections.Generic;
 using Attributes;
-using Construct.Model;
 using UnityEngine;
 
-namespace Construct.Views {
-    sealed public class SingulaView : MonoBehaviour {
-        [ReadOnly] public int Id;
-        [ReadOnly] public string Name;
+namespace Construct.Views
+{
+    public sealed public class SingulaView : MonoBehaviour {
         [ReadOnly] public int EcsEntity;
-        [ReadOnly] public Dictionary<int, Pimple> Pimples = new();
     }
 }

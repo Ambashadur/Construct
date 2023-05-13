@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Construct.Components;
 using Construct.Model;
@@ -6,8 +7,10 @@ using Construct.Views;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Construct.Systems {
-    sealed class LoadConventusSystem : IEcsRunSystem {
+namespace Construct.Systems
+{
+    public sealed class LoadConventusSystem : IEcsRunSystem 
+    {
         private readonly EcsWorld _world;
         private readonly IDbController _controller;
         private readonly EcsFilter _loadConventusFilter;
@@ -18,7 +21,8 @@ namespace Construct.Systems {
         private readonly Material _greenOutline;
         private readonly int _singulaLayer;
 
-        public LoadConventusSystem(EcsWorld world, LayerMask singulaLayer, IDbController controller) {
+        public LoadConventusSystem(EcsWorld world, LayerMask singulaLayer, IDbController controller) 
+        {
             _world = world;
             _controller = controller;
             _loadConventusFilter = _world.Filter<LoadConventus>().End();
@@ -30,7 +34,8 @@ namespace Construct.Systems {
             _singulaLayer = (int)Mathf.Log(singulaLayer, 2);
         }
 
-        public void Run(IEcsSystems systems) {
+        public void Run(IEcsSystems systems) 
+        {
             foreach (var entity in _loadConventusFilter) {
                 ref var loadConventus = ref _loadConventusPool.Get(entity);
                 var loadedConventus = _controller.DonwloadConventus(loadConventus.Id);
@@ -48,9 +53,9 @@ namespace Construct.Systems {
                             Id = joinDto.join_id,
                             NextJoinIds = joinDto.next_join_ids,
                             LeftJoinId = joinDto.left_join_id,
-                            LeftPimples = joinDto.left_pimples,
+                            LeftPimples = new List<SingulaJoin>(0),
                             RightJoinId = joinDto.right_join_id,
-                            RightPimples = joinDto.right_pimples
+                            RightPimples = new List<SingulaJoin>(0)
                         }
                     );
                 
@@ -69,9 +74,9 @@ namespace Construct.Systems {
                     
                     singula.SingulaView = singulaObject.AddComponent<SingulaView>();
                     singula.SingulaView.EcsEntity = singulaEntity;
-                    singula.SingulaView.Id = singulaDto.singula_id;
-                    singula.SingulaView.Name = singulaDto.name;
-                    singula.SingulaView.Pimples = singulaDto.pimples.ToDictionary(
+                    singula.Id = singulaDto.singula_id;
+                    singula.Name = singulaDto.name;
+                    singula.Pimples = singulaDto.pimples.ToDictionary(
                         pimpleDto => pimpleDto.id,
                         pimpleDto => new Pimple()
                         {

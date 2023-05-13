@@ -18,8 +18,8 @@ namespace Construct.Systems
 
         private const float nearDistance = 0.75f;
 
-        private NearestJoin _nearestJoin = new();
-        private NearestJoin? _oldNearestJoin = null;
+        private NearestPimple _nearestJoin = new();
+        private NearestPimple? _oldNearestJoin = null;
 
         public SingulaSystem(EcsWorld world)
         {
@@ -46,10 +46,14 @@ namespace Construct.Systems
                 var singulaTransform = singula.SingulaView.GetComponent<Transform>();
 
                 _nearestJoin.Distance = float.MaxValue;
-                var joinPositions = singula.SingulaView.Joins.ToDictionary(
+                _nearestJoin.NearEcsEntity = -1;
+                _nearestJoin.NearPimpleId = -1;
+                _nearestJoin.NearJoinId = -1;
+                _nearestJoin.PimpleId = -1;
+
+                var pimplePositions = singula.Pimples.ToDictionary(
                     kv => kv.Key,
-                    kv => singulaTransform.TransformPoint(kv.Value.Position)
-                );
+                    kv => singulaTransform.TransformPoint(kv.Value.Position));
 
                 foreach (var possibleJoinEntity in _possibleJoinFilter) {
                     ref var possibleJoinSingula = ref _singulaPool.Get(possibleJoinEntity);
@@ -58,14 +62,16 @@ namespace Construct.Systems
 
                     foreach (var kv in possibleJoin.PimplePairs) {
                         var distance = Vector3.Distance(
-                            joinPositions[kv.Value],
-                            possibleJoinSingulaTransform.TransformPoint(possibleJoinSingula.SingulaView.Joins[kv.Key].Position)
+                            pimplePositions[kv.Value],
+                            possibleJoinSingulaTransform.TransformPoint(possibleJoinSingula.Pimples[kv.Key].Position)
                         );
 
-                        if (distance <= _nearestJoin.Distance) {
+                        if (possibleJoinSingula.Pimples[kv.Key].JoinId != _nearestJoin.NearJoinId 
+                            && distance <= _nearestJoin.Distance) {
                             _nearestJoin.Distance = distance;
-                            _nearestJoin.JoinId = kv.Value;
-                            _nearestJoin.NearJoinId = kv.Key;
+                            _nearestJoin.PimpleId = kv.Value;
+                            _nearestJoin.NearPimpleId = kv.Key;
+                            _nearestJoin.NearJoinId = possibleJoinSingula.Pimples[kv.Key].JoinId;
                             _nearestJoin.NearEcsEntity = possibleJoinEntity;
                         }
                     }
@@ -96,13 +102,13 @@ namespace Construct.Systems
 
                     singulaFrameTransform.rotation = possibleJoinSingulaTransform.rotation;
                     singulaFrameTransform.position = possibleJoinSingulaTransform.TransformPoint(
-                        possibleJoinSingula.SingulaView.Joins[_nearestJoin.NearJoinId].Position 
-                        - singula.SingulaView.Joins[_nearestJoin.JoinId].Position);
+                        possibleJoinSingula.Pimples[_nearestJoin.NearPimpleId].Position 
+                        - singula.Pimples[_nearestJoin.PimpleId].Position);
 
                     singulaFrameTransform.SetParent(possibleJoinSingulaTransform);
 
                     possibleJoin.SingulaFrame = singulaFrameObject;
-                    possibleJoin.PimpleIdSingulaFrame = _nearestJoin.NearJoinId;
+                    possibleJoin.PimpleIdSingulaFrame = _nearestJoin.NearPimpleId;
                     inHand.PossibleJoinEcsEntity = _nearestJoin.NearEcsEntity;
                     _oldNearestJoin = _nearestJoin;
                 }
@@ -110,9 +116,10 @@ namespace Construct.Systems
         }
     }
 
-    internal struct NearestJoin
+    internal struct NearestPimple
     {
-        public int JoinId;
+        public int PimpleId;
+        public int NearPimpleId;
         public int NearJoinId;
         public int NearEcsEntity;
         public float Distance;

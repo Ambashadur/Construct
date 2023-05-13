@@ -2,21 +2,25 @@ using UnityEngine;
 using Leopotam.EcsLite;
 using Construct.Components;
 
-namespace Construct.Systems {
-    sealed class StartFocusSystem : IEcsRunSystem {   
+namespace Construct.Systems
+{
+    public sealed class StartFocusSystem : IEcsRunSystem
+    {
         private readonly EcsWorld _world;
         private readonly EcsFilter _singulaStartFocusFilter;
         private readonly EcsPool<Singula> _singulaPool;
         private readonly EcsPool<StartFocus> _startFocusPool;
 
-        public StartFocusSystem(EcsWorld world) {
+        public StartFocusSystem(EcsWorld world)
+        {
             _world = world;
             _singulaStartFocusFilter = _world.Filter<Singula>().Inc<StartFocus>().End();
             _singulaPool = _world.GetPool<Singula>();
             _startFocusPool = _world.GetPool<StartFocus>();
         }
 
-        public void Run (IEcsSystems systems) {
+        public void Run (IEcsSystems systems)
+        {
             foreach (var entity in _singulaStartFocusFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
                 singula.SingulaView.GetComponent<MeshRenderer>().material.SetInt("_Outline", 1);

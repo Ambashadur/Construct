@@ -2,8 +2,10 @@ using Construct.Components;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Construct.Systems {
-    public sealed class ReleaseFromHandSystem : IEcsRunSystem {
+namespace Construct.Systems
+{
+    public sealed class ReleaseFromHandSystem : IEcsRunSystem
+    {
         private readonly EcsWorld _world;
         private readonly EcsFilter _releaseFromHandFilter;
         private readonly EcsFilter _possibleJoinFilter;
@@ -11,7 +13,8 @@ namespace Construct.Systems {
         private readonly EcsPool<InHand> _inHandPool;
         private readonly EcsPool<PossibleJoin> _possibleJoinPool;
 
-        public ReleaseFromHandSystem(EcsWorld world) {
+        public ReleaseFromHandSystem(EcsWorld world)
+        {
             _world = world;
             _releaseFromHandFilter = _world.Filter<Singula>().Inc<ReleaseFromHand>().End();
             _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
@@ -20,7 +23,8 @@ namespace Construct.Systems {
             _inHandPool = _world.GetPool<InHand>();
         }
 
-        public void Run (IEcsSystems systems) {
+        public void Run (IEcsSystems systems)
+        {
             foreach (var entity in _releaseFromHandFilter) {
                 foreach (var possibleJoinEntity in _possibleJoinFilter) {
                     GameObject.Destroy(_possibleJoinPool.Get(possibleJoinEntity).SingulaFrame);

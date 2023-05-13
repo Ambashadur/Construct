@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Construct.Services {
     [Serializable]
-    public class SingulaDto {
+    public sealed class SingulaDto {
         public string name;
         public int singula_id;
         public string model;

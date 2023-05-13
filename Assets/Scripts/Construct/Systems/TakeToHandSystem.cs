@@ -31,13 +31,13 @@ namespace Construct.Systems {
         public void Run (IEcsSystems systems) {
             foreach (var entity in _takeToHandFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
-                ref var conventus = ref _conventusPool.Get(entity);
+                ref var conventus = ref _conventusPool.Get(singula.ConventusEcsEntity);
 
-                GetNextJoinPairs(singula.SingulaView.Pimples, conventus, out var nextJoinPairs);
+                GetNextJoinPairs(singula.Pimples, conventus, out var nextJoinPairs);
 
                 foreach (var otherEntity in _otherSingulaFilter) {
                     ref var otherSingula = ref _singulaPool.Get(otherEntity);
-                    GetNextJoinPairs(otherSingula.SingulaView.Pimples, conventus, out var otherNextJoinPairs);
+                    GetNextJoinPairs(otherSingula.Pimples, conventus, out var otherNextJoinPairs);
                     var commonNextJoinIds = nextJoinPairs.Keys.Intersect(otherNextJoinPairs.Keys);
 
                     if (commonNextJoinIds.Count() > 0) {

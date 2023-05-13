@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player {
-    public class PlayerInteraction : PlayerConnection {
+    public sealed class PlayerInteraction : PlayerConnection {
         [SerializeField] private Transform _playerCamera;
         [SerializeField] private float _distance = 75.0f;
         [SerializeField] private LayerMask _singulaLayer;
@@ -33,9 +33,8 @@ namespace Player {
             var center = new Vector3(Screen.width / 2, Screen.width / 2, 0);
             var ray = new Ray(_playerCamera.position, _playerCamera.forward);
 
-            if (Physics.Raycast(ray, out var hit, _distance, _singulaLayer)) {
-                var singulaView = hit.transform.GetComponent<SingulaView>();
-
+            if (Physics.Raycast(ray, out var hit, _distance, _singulaLayer)
+                && hit.transform.TryGetComponent<SingulaView>(out var singulaView)) {
                 if (_singulaView == null) {
                     _singulaView = singulaView;
                     World.GetPool<StartFocus>().Add(_singulaView.EcsEntity);
@@ -98,11 +97,19 @@ namespace Player {
         public void Join(InputAction.CallbackContext _) {
             if (!_isDrag) return;
 
+            _isDrag = false;
+            _singulaTransform.SetParent(null);
+            _singulaTransform = null;
+            _singulaRigidbody.isKinematic = false;
+            _singulaRigidbody = null;
+
             World.GetPool<JoinSingula>().Add(_singulaView.EcsEntity);
         }
 
         public void Detach(InputAction.CallbackContext _) {
-            
+            if (!_isDrag) return;
+
+            World.GetPool<DetachSingula>().Add(_singulaView.EcsEntity);
         }
     }
 }
