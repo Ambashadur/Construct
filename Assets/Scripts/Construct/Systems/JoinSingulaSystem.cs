@@ -145,6 +145,7 @@ namespace Construct.Systems
                 } else {
                     var gameObject = new GameObject("MetaSingula");
                     gameObject.transform.position = leftSingula.Transform.position;
+                    gameObject.transform.rotation = leftSingula.Transform.rotation;
                     leftSingula.Transform.SetParent(gameObject.transform);
                     rightSingula.Transform.SetParent(gameObject.transform);
 
