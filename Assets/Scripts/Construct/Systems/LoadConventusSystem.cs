@@ -43,9 +43,6 @@ namespace Construct.Systems
                 ref var conventus = ref _conventusPool.Add(entity);
                 conventus.Id = loadedConventus.conventus_id;
                 conventus.Name = loadedConventus.conventus_name;
-
-                // TODO: Сделать автоматический рассчет в каких соединениях какие детали будут
-                // сделать это не трудно, нужно пройти по всех иерархии, и собрать все детали.
                 conventus.Joins = loadedConventus.joins
                     .ToDictionary(
                         joinDto => joinDto.join_id,
@@ -71,9 +68,14 @@ namespace Construct.Systems
                     singulaObject.layer = _singulaLayer;
                     singulaObject.AddComponent<MeshCollider>().convex = true;
                     singulaObject.AddComponent<Rigidbody>();
+                    var singulaMeshRenderer = singulaObject.GetComponent<MeshRenderer>();
                     
                     singula.SingulaView = singulaObject.AddComponent<SingulaView>();
+                    singula.SingulaView.Id = singulaDto.singula_id;
                     singula.SingulaView.EcsEntity = singulaEntity;
+                    singula.SingulaView.Name = singulaDto.name;
+                    singula.Transform = singulaObject.GetComponent<Transform>();
+                    singula.Renderer = singulaMeshRenderer;
                     singula.Id = singulaDto.singula_id;
                     singula.Name = singulaDto.name;
                     singula.Pimples = singulaDto.pimples.ToDictionary(
@@ -85,9 +87,9 @@ namespace Construct.Systems
                             JoinId = pimpleDto.join_id,
                         });
 
+                    singula.SingulaView.Pimples = singula.Pimples.Select(x => x.Value).ToArray();
                     singula.ConventusEcsEntity = entity;
 
-                    var singulaMeshRenderer = singulaObject.GetComponent<MeshRenderer>();
                     var singulaTexture = singulaMeshRenderer.material.mainTexture;
                     var singulaColor = singulaMeshRenderer.material.color;
 

@@ -4,8 +4,10 @@ using Construct.Components;
 using Construct.Model;
 using Leopotam.EcsLite;
 
-namespace Construct.Systems {
-    public sealed class TakeToHandSystem : IEcsRunSystem {
+namespace Construct.Systems
+{
+    public sealed class TakeToHandSystem : IEcsRunSystem
+    {
         private readonly EcsWorld _world;
         private readonly EcsFilter _takeToHandFilter;
         private readonly EcsFilter _otherSingulaFilter;
@@ -16,10 +18,11 @@ namespace Construct.Systems {
         private readonly EcsPool<EndFocus> _endFocusPool;
         private readonly EcsPool<Conventus> _conventusPool;
 
-        public TakeToHandSystem(EcsWorld world) {
+        public TakeToHandSystem(EcsWorld world)
+        {
             _world = world;
             _takeToHandFilter = _world.Filter<Singula>().Inc<TakeToHand>().End();
-            _otherSingulaFilter = _world.Filter<Singula>().Exc<TakeToHand>().End();
+            _otherSingulaFilter = _world.Filter<Singula>().Exc<TakeToHand>().Exc<InJoin>().End();
             _singulaPool = _world.GetPool<Singula>();
             _takeToHandPool = _world.GetPool<TakeToHand>();
             _inHandPool = _world.GetPool<InHand>();
@@ -28,7 +31,8 @@ namespace Construct.Systems {
             _conventusPool = _world.GetPool<Conventus>();
         }
 
-        public void Run (IEcsSystems systems) {
+        public void Run (IEcsSystems systems)
+        {
             foreach (var entity in _takeToHandFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
                 ref var conventus = ref _conventusPool.Get(singula.ConventusEcsEntity);

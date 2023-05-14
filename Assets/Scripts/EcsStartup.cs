@@ -3,15 +3,18 @@ using Leopotam.EcsLite;
 using Construct.Systems;
 using Construct.Services.Impl;
 
-namespace Construct {
-    sealed class EcsStartup : MonoBehaviour {
+namespace Construct
+{
+    public sealed class EcsStartup : MonoBehaviour
+    {
         [SerializeField] private PlayerConnection _playerConnection;
         [SerializeField] private LayerMask _singulaLayer;
 
         EcsWorld _world;
         IEcsSystems _systems;
 
-        void Start () {
+        void Start ()
+        {
             _world = new EcsWorld ();
             _playerConnection.World = _world;
             _systems = new EcsSystems (_world);
@@ -30,11 +33,13 @@ namespace Construct {
                 .Init();
         }
 
-        void Update () {
+        void Update ()
+        {
             _systems?.Run();
         }
 
-        void OnDestroy () {
+        void OnDestroy ()
+        {
             if (_systems != null) {
                 _systems.Destroy();
                 _systems = null;

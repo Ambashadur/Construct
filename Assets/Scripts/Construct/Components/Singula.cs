@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Construct.Model;
 using Construct.Views;
+using UnityEngine;
 
 namespace Construct.Components
 {
@@ -13,6 +14,10 @@ namespace Construct.Components
         /// —сылка на объект игрового представлени€ детали.
         /// </summary>
         public SingulaView SingulaView;
+
+        public Transform Transform;
+
+        public MeshRenderer Renderer;
 
         /// <summary>
         /// ”никальный идентификатор детали.

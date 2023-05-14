@@ -1,6 +1,5 @@
-using UnityEngine;
-using Leopotam.EcsLite;
 using Construct.Components;
+using Leopotam.EcsLite;
 
 namespace Construct.Systems
 {

@@ -1,4 +1,4 @@
 namespace Construct.Components
 {
-    public struct StartFocus { }
+    public struct InJoin { }
 }

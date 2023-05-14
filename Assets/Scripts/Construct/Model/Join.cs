@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Construct.Model {
+namespace Construct.Model
+{
     [Serializable]
-    public sealed class Join {
+    public sealed class Join
+    {
         public int Id;
         public int[] NextJoinIds;
         public int LeftJoinId;
@@ -13,7 +15,8 @@ namespace Construct.Model {
     }
 
     [Serializable]
-    public struct SingulaJoin {
+    public struct SingulaJoin
+    {
         public int SingulaId;
         public int PimpleId;
     }

@@ -1,5 +1,7 @@
-namespace Construct.Components {
-    public struct InHand {
+namespace Construct.Components
+{
+    public struct InHand
+    {
         public int PossibleJoinEcsEntity;
     }
 }

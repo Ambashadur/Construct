@@ -1,10 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 using Construct.Views;
+using Construct.Model;
 
-namespace Construct.Editors {
+namespace Construct.Editors
+{
     [CustomEditor(typeof(SingulaView))]
-    sealed public class SingulaViewEditor : Editor {
+    public sealed class SingulaViewEditor : Editor
+    {
         private SingulaView _singulaTarget;
 
         private void OnEnable() => _singulaTarget = target as SingulaView;
@@ -26,24 +29,25 @@ namespace Construct.Editors {
         }
 
         private void OnSceneGUI() {
-            Handles.color = Color.green;
+            Handles.color = Color.red;
 
-            foreach (var kv in _singulaTarget.Pimples) {
+            for (int i = 0; i < _singulaTarget.Pimples.Length; i++) {
                 EditorGUI.BeginChangeCheck();
-                var position = _singulaTarget.transform.TransformPoint(kv.Value.Position);
+                var pimple = _singulaTarget.Pimples[i];
+                var position = _singulaTarget.transform.TransformPoint(pimple.Position);
 
                 var newPosition = Handles.FreeMoveHandle(
-                    position, 
-                    Quaternion.identity, 
-                    HandleUtility.GetHandleSize(position) * 0.05f, 
-                    Vector3.zero, 
+                    position,
+                    Quaternion.identity,
+                    HandleUtility.GetHandleSize(position) * 0.05f,
+                    Vector3.zero,
                     Handles.DotHandleCap);
 
                 if (EditorGUI.EndChangeCheck()) {
                     Undo.RecordObject(_singulaTarget, "Change leg vertex position");
-                    var value = kv.Value;
+                    var value = pimple;
                     value.Position = _singulaTarget.transform.InverseTransformPoint(newPosition);
-                    _singulaTarget.Pimples[kv.Key] = value;
+                    _singulaTarget.Pimples[i] = value;
                     serializedObject.Update();
                 }
             }

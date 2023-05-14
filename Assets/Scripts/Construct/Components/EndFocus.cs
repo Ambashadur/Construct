@@ -1,3 +1,4 @@
-namespace Construct.Components {
+namespace Construct.Components
+{
     public struct EndFocus { }
 }

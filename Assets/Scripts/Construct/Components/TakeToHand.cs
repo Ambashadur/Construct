@@ -1,3 +1,4 @@
-namespace Construct.Components {
+namespace Construct.Components
+{
     struct TakeToHand { }
 }

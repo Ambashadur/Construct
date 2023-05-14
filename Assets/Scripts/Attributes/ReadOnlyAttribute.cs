@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-namespace Attributes {
+namespace Attributes
+{
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class ReadOnlyAttribute : PropertyAttribute {}
+    public class ReadOnlyAttribute : PropertyAttribute { }
 }
