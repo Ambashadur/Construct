@@ -83,7 +83,7 @@ namespace Player
 
             var xRotation = -input.y * _mouseYSensivity * Time.deltaTime;
             xRotation = Mathf.Clamp(currentXRotation + xRotation, -_cameraXClamp, _cameraXClamp) - currentXRotation;
-            var yRotation = input.x * _mouseXSensivity* Time.deltaTime;
+            var yRotation = input.x * _mouseXSensivity * Time.deltaTime;
 
             transform.Rotate(Vector3.up, yRotation, Space.World);
             _playerCamera.Rotate(Vector3.up, yRotation, Space.World);
