@@ -41,6 +41,8 @@ namespace Player
             _characterController = GetComponent<CharacterController>();
             _interaction = GetComponent<PlayerInteraction>();
 
+            _playerCamera.rotation = _cachedTransform.rotation;
+
             _playerInput.FPSMap.Drag.started += _interaction.Drag;
             _playerInput.FPSMap.Release.started += _interaction.Release;
             _playerInput.FPSMap.Join.started += _interaction.Join;
