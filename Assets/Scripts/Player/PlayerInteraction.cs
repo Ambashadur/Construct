@@ -105,6 +105,7 @@ namespace Player
                 _singulaRigidbody = null;
 
                 World.GetPool<JoinSingula>().Add(_singulaView.EcsEntity);
+                _singulaView = null;
             }
         }
 

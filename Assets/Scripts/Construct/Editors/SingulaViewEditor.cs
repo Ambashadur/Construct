@@ -1,6 +1,8 @@
+using Construct.Views;
 using UnityEditor;
 using UnityEngine;
-using Construct.Views;
+using UnityEditorInternal;
+using System;
 using Construct.Model;
 
 namespace Construct.Editors
@@ -9,8 +11,25 @@ namespace Construct.Editors
     public sealed class SingulaViewEditor : Editor
     {
         private SingulaView _singulaTarget;
+        private ReorderableList _pimpleList;
 
-        private void OnEnable() => _singulaTarget = target as SingulaView;
+        private readonly float ITEM_LIST_HEIGHT = EditorGUIUtility.singleLineHeight * 2 + 5;
+
+        private void OnEnable()
+        {
+            _singulaTarget = target as SingulaView;
+            _pimpleList = new(
+                serializedObject: serializedObject,
+                elements: serializedObject.FindProperty("Pimples"),
+                draggable: true,
+                displayHeader: true,
+                displayAddButton: true,
+                displayRemoveButton: true);
+
+            _pimpleList.drawHeaderCallback = DrawHeader;
+            _pimpleList.drawElementCallback = DrawListItems;
+            _pimpleList.elementHeight = ITEM_LIST_HEIGHT;
+        }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
@@ -21,7 +40,7 @@ namespace Construct.Editors
 
             EditorGUILayout.Separator();
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Pimples"));
+            _pimpleList.DoLayoutList();
 
             EditorGUILayout.Separator();
 
@@ -29,6 +48,8 @@ namespace Construct.Editors
         }
 
         private void OnSceneGUI() {
+            if (_singulaTarget.Pimples is null) _singulaTarget.Pimples = Array.Empty<Pimple>();
+
             Handles.color = Color.red;
 
             for (int i = 0; i < _singulaTarget.Pimples.Length; i++) {
@@ -51,6 +72,23 @@ namespace Construct.Editors
                     serializedObject.Update();
                 }
             }
+        }
+
+        private void DrawHeader(Rect rect)
+        {
+            const string headerName = "Pimples";
+            EditorGUI.LabelField(rect, headerName);
+        }
+
+        private void DrawListItems(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            var element = _pimpleList.serializedProperty.GetArrayElementAtIndex(index);
+
+            var labelRect = new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight);
+            var propertyRect = new Rect(rect.x + labelRect.width, rect.y, rect.width - labelRect.width, EditorGUIUtility.singleLineHeight);
+
+            EditorGUI.LabelField(labelRect, "Position");
+            EditorGUI.PropertyField(propertyRect, element.FindPropertyRelative("Position"), GUIContent.none);
         }
     }
 }

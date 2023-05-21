@@ -21,6 +21,7 @@ namespace Construct.Systems
         private readonly EcsPool<ReleaseFromHand> _releaseFromHandPool;
         private readonly EcsPool<InJoin> _inJoinPool;
         private readonly EcsPool<MetaSingula> _metaSingulaPool;
+        private readonly EcsPool<DeleteSingula> _deleteSingulaPool;
 
         public JoinSingulaSystem(EcsWorld world)
         {
@@ -34,6 +35,7 @@ namespace Construct.Systems
             _releaseFromHandPool = _world.GetPool<ReleaseFromHand>();
             _inJoinPool = _world.GetPool<InJoin>();
             _metaSingulaPool = _world.GetPool<MetaSingula>();
+            _deleteSingulaPool = _world.GetPool<DeleteSingula>();
         }
 
         public void Run (IEcsSystems systems)
@@ -101,6 +103,9 @@ namespace Construct.Systems
                         ref var inMetaSingula = ref _singulaPool.Get(inMetaSingulaEcsEntity);
                         leftMeta.SingulaEcsEntities.Add(inMetaSingulaEcsEntity);
                         inMetaSingula.Transform.SetParent(leftSingula.Transform);
+
+                        ref var inJoin = ref _inJoinPool.Get(inMetaSingulaEcsEntity);
+                        inJoin.MetaSingulaEcsEntity = inHand.PossibleJoinEcsEntity;
                     }
 
                     leftSingula.Pimples = GetNewPimples(
@@ -112,6 +117,7 @@ namespace Construct.Systems
                         leftSingula);
 
                     GameObject.Destroy(rightSingula.Transform.gameObject);
+                    _deleteSingulaPool.Add(entity);
                 } else if (isRightSingulaMeta) {
                     ref var rightMeta = ref _metaSingulaPool.Get(entity);
                     rightMeta.SingulaEcsEntities.Add(inHand.PossibleJoinEcsEntity);

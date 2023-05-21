@@ -27,6 +27,7 @@ namespace Construct
                 .Add(new EndFocusSystem(_world))
                 .Add(new StartFocusSystem(_world))
                 .Add(new LoadConventusSystem(_world, _singulaLayer, new DbController()))
+                .Add(new DeleteSingulaSystem(_world))
 #if UNITY_EDITOR
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif

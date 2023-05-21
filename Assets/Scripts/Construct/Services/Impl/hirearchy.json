@@ -7,7 +7,7 @@
             "singula_id": 2,
             "model": "engine_assy2_conrod",
             "position": {
-                "x": -2,
+                "x": -4,
                 "y": 1.5,
                 "z": 0
             },
@@ -20,6 +20,15 @@
                         "z": 0
                     },
                     "join_id": 1
+                },
+                {
+                    "id": 2,
+                    "position": {
+                        "x": -0.015,
+                        "y": -0.545,
+                        "z": 0
+                    },
+                    "join_id": 9
                 }
             ]
         },
@@ -28,7 +37,7 @@
             "singula_id": 9,
             "model": "engine_assy2_piston",
             "position": {
-                "x": 0,
+                "x": -2,
                 "y": 1.5,
                 "z": 0
             },
@@ -49,7 +58,7 @@
             "singula_id": 15,
             "model": "engine_assy2_wrist_pin",
             "position": {
-                "x": 2,
+                "x": 0,
                 "y": 1.5,
                 "z": 0
             },
@@ -62,6 +71,69 @@
                         "z": 0
                     },
                     "join_id": 3
+                }
+            ]
+        },
+        {
+            "name": "conrod-cap",
+            "singula_id": 16,
+            "model": "engine_assy2_conrod-cap",
+            "position": {
+                "x": 1,
+                "y": 1.5,
+                "z": 0
+            },
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": 0.007,
+                        "y": 0.135,
+                        "z": 0
+                    },
+                    "join_id": 8
+                }
+            ]
+        },
+        {
+            "name": "conrod-brg",
+            "singula_id": 17,
+            "model": "engine_assy2_conrod-brg",
+            "position": {
+                "x": 2,
+                "y": 1.5,
+                "z": 0
+            },
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": -0.007,
+                        "y": 0.09,
+                        "z": 0
+                    },
+                    "join_id": 10
+                }
+            ]
+        },
+        {
+            "name": "conrod-brg_1",
+            "singula_id": 18,
+            "model": "engine_assy2_conrod-brg_1",
+            "position": {
+                "x": 3,
+                "y": 1.5,
+                "z": 0
+            },
+            "pimples": [
+                {
+                    "id": 1,
+                    "position": {
+                        "x": -0.007,
+                        "y": -0.09,
+                        "z": 0
+                    },
+                    "join_id": 11
                 }
             ]
         }
@@ -102,6 +174,40 @@
             "next_join_ids": [],
             "left_join_id": 3,
             "right_join_id": 4
+        },
+        {
+            "join_id": 8,
+            "next_join_ids": [ 12 ]
+        },
+        {
+            "join_id": 9,
+            "next_join_ids": [ 13 ]
+        },
+        {
+            "join_id": 10,
+            "next_join_ids": [ 12 ]
+        },
+        {
+            "join_id": 11,
+            "next_join_ids": [ 13 ]
+        },
+        {
+            "join_id": 12,
+            "next_join_ids": [ 14 ],
+            "left_join_id": 8,
+            "right_join_id": 10
+        },
+        {
+            "join_id": 13,
+            "next_join_ids": [ 14 ],
+            "left_join_id": 9,
+            "right_join_id": 11
+        },
+        {
+            "join_id": 14,
+            "next_join_ids": [],
+            "left_join_id": 12,
+            "right_join_id": 13
         }
     ]
 }
