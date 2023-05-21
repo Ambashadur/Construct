@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Join",
+                    "name": "Action",
                     "type": "Button",
                     "id": "6410e3f2-03de-4452-966a-98af5de0faf5",
                     "expectedControlType": "Button",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Detach",
+                    "name": "SwitchMode",
                     "type": "Button",
                     "id": "c1712d66-65d8-4ebe-8d31-669ae000b718",
                     "expectedControlType": "Button",
@@ -163,18 +163,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Join",
+                    "action": "Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "2b804d03-0574-4821-b93d-4f4d8a9dde7e",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Detach",
+                    "action": "SwitchMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

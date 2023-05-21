@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Construct.Components;
-using Construct.Views;
 using Leopotam.EcsLite;
 using UnityEngine;
 

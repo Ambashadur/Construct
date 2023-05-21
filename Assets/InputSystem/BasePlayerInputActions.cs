@@ -55,7 +55,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Join"",
+                    ""name"": ""Action"",
                     ""type"": ""Button"",
                     ""id"": ""6410e3f2-03de-4452-966a-98af5de0faf5"",
                     ""expectedControlType"": ""Button"",
@@ -64,7 +64,7 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Detach"",
+                    ""name"": ""SwitchMode"",
                     ""type"": ""Button"",
                     ""id"": ""c1712d66-65d8-4ebe-8d31-669ae000b718"",
                     ""expectedControlType"": ""Button"",
@@ -185,18 +185,18 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Join"",
+                    ""action"": ""Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""2b804d03-0574-4821-b93d-4f4d8a9dde7e"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Detach"",
+                    ""action"": ""SwitchMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -243,8 +243,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         m_FPSMap_Movement = m_FPSMap.FindAction("Movement", throwIfNotFound: true);
         m_FPSMap_View = m_FPSMap.FindAction("View", throwIfNotFound: true);
         m_FPSMap_Drag = m_FPSMap.FindAction("Drag", throwIfNotFound: true);
-        m_FPSMap_Join = m_FPSMap.FindAction("Join", throwIfNotFound: true);
-        m_FPSMap_Detach = m_FPSMap.FindAction("Detach", throwIfNotFound: true);
+        m_FPSMap_Action = m_FPSMap.FindAction("Action", throwIfNotFound: true);
+        m_FPSMap_SwitchMode = m_FPSMap.FindAction("SwitchMode", throwIfNotFound: true);
         m_FPSMap_Download = m_FPSMap.FindAction("Download", throwIfNotFound: true);
         m_FPSMap_Release = m_FPSMap.FindAction("Release", throwIfNotFound: true);
         m_FPSMap_Rotate = m_FPSMap.FindAction("Rotate", throwIfNotFound: true);
@@ -312,8 +312,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_FPSMap_Movement;
     private readonly InputAction m_FPSMap_View;
     private readonly InputAction m_FPSMap_Drag;
-    private readonly InputAction m_FPSMap_Join;
-    private readonly InputAction m_FPSMap_Detach;
+    private readonly InputAction m_FPSMap_Action;
+    private readonly InputAction m_FPSMap_SwitchMode;
     private readonly InputAction m_FPSMap_Download;
     private readonly InputAction m_FPSMap_Release;
     private readonly InputAction m_FPSMap_Rotate;
@@ -324,8 +324,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         public InputAction @Movement => m_Wrapper.m_FPSMap_Movement;
         public InputAction @View => m_Wrapper.m_FPSMap_View;
         public InputAction @Drag => m_Wrapper.m_FPSMap_Drag;
-        public InputAction @Join => m_Wrapper.m_FPSMap_Join;
-        public InputAction @Detach => m_Wrapper.m_FPSMap_Detach;
+        public InputAction @Action => m_Wrapper.m_FPSMap_Action;
+        public InputAction @SwitchMode => m_Wrapper.m_FPSMap_SwitchMode;
         public InputAction @Download => m_Wrapper.m_FPSMap_Download;
         public InputAction @Release => m_Wrapper.m_FPSMap_Release;
         public InputAction @Rotate => m_Wrapper.m_FPSMap_Rotate;
@@ -347,12 +347,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Drag.started += instance.OnDrag;
             @Drag.performed += instance.OnDrag;
             @Drag.canceled += instance.OnDrag;
-            @Join.started += instance.OnJoin;
-            @Join.performed += instance.OnJoin;
-            @Join.canceled += instance.OnJoin;
-            @Detach.started += instance.OnDetach;
-            @Detach.performed += instance.OnDetach;
-            @Detach.canceled += instance.OnDetach;
+            @Action.started += instance.OnAction;
+            @Action.performed += instance.OnAction;
+            @Action.canceled += instance.OnAction;
+            @SwitchMode.started += instance.OnSwitchMode;
+            @SwitchMode.performed += instance.OnSwitchMode;
+            @SwitchMode.canceled += instance.OnSwitchMode;
             @Download.started += instance.OnDownload;
             @Download.performed += instance.OnDownload;
             @Download.canceled += instance.OnDownload;
@@ -375,12 +375,12 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
             @Drag.started -= instance.OnDrag;
             @Drag.performed -= instance.OnDrag;
             @Drag.canceled -= instance.OnDrag;
-            @Join.started -= instance.OnJoin;
-            @Join.performed -= instance.OnJoin;
-            @Join.canceled -= instance.OnJoin;
-            @Detach.started -= instance.OnDetach;
-            @Detach.performed -= instance.OnDetach;
-            @Detach.canceled -= instance.OnDetach;
+            @Action.started -= instance.OnAction;
+            @Action.performed -= instance.OnAction;
+            @Action.canceled -= instance.OnAction;
+            @SwitchMode.started -= instance.OnSwitchMode;
+            @SwitchMode.performed -= instance.OnSwitchMode;
+            @SwitchMode.canceled -= instance.OnSwitchMode;
             @Download.started -= instance.OnDownload;
             @Download.performed -= instance.OnDownload;
             @Download.canceled -= instance.OnDownload;
@@ -412,8 +412,8 @@ public partial class @BasePlayerInputActions: IInputActionCollection2, IDisposab
         void OnMovement(InputAction.CallbackContext context);
         void OnView(InputAction.CallbackContext context);
         void OnDrag(InputAction.CallbackContext context);
-        void OnJoin(InputAction.CallbackContext context);
-        void OnDetach(InputAction.CallbackContext context);
+        void OnAction(InputAction.CallbackContext context);
+        void OnSwitchMode(InputAction.CallbackContext context);
         void OnDownload(InputAction.CallbackContext context);
         void OnRelease(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);

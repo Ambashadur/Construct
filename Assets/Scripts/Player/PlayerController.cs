@@ -45,8 +45,8 @@ namespace Player
 
             _playerInput.FPSMap.Drag.started += _interaction.Drag;
             _playerInput.FPSMap.Release.started += _interaction.Release;
-            _playerInput.FPSMap.Join.started += _interaction.Join;
-            _playerInput.FPSMap.Detach.started += _interaction.Detach;
+            _playerInput.FPSMap.Action.started += _interaction.Action;
+            _playerInput.FPSMap.SwitchMode.started += _interaction.SwitchMode;
             _playerInput.FPSMap.Rotate.started += (InputAction.CallbackContext _) => _isRotatation = true;
             _playerInput.FPSMap.Rotate.canceled += (InputAction.CallbackContext _) => _isRotatation = false;
 

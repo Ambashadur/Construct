@@ -151,10 +151,8 @@ namespace Construct.Systems
 
                     gameObject.AddComponent<Rigidbody>();
                     var metaSingulaView = gameObject.AddComponent<MetaSingulaView>();
-                    var leftRigidbody = leftSingula.SingulaView.GetComponent<Rigidbody>();
-                    var rightRigidbody = rightSingula.SingulaView.GetComponent<Rigidbody>();
-                    GameObject.Destroy(leftRigidbody);
-                    GameObject.Destroy(rightRigidbody);
+                    GameObject.Destroy(leftSingula.SingulaView.GetComponent<Rigidbody>());
+                    GameObject.Destroy(rightSingula.SingulaView.GetComponent<Rigidbody>());
 
                     var metaSingulaEntity = _world.NewEntity();
                     ref var meta = ref _metaSingulaPool.Add(metaSingulaEntity);
@@ -186,8 +184,11 @@ namespace Construct.Systems
 
                     metaSingula.SingulaView.Pimples = metaSingula.Pimples.Select(x => x.Value).ToArray();
 
-                    _inJoinPool.Add(entity);
-                    _inJoinPool.Add(inHand.PossibleJoinEcsEntity);
+                    ref var rightInJoin = ref _inJoinPool.Add(entity);
+                    rightInJoin.MetaSingulaEcsEntity = metaSingulaEntity;
+
+                    ref var leftInJoin = ref _inJoinPool.Add(inHand.PossibleJoinEcsEntity);
+                    leftInJoin.MetaSingulaEcsEntity = metaSingulaEntity;
                 }
 
                 _joinSingulaPool.Del(entity);
