@@ -10,10 +10,10 @@ namespace Construct
         [SerializeField] private PlayerConnection _playerConnection;
         [SerializeField] private LayerMask _singulaLayer;
 
-        EcsWorld _world;
-        IEcsSystems _systems;
+        private EcsWorld _world;
+        private IEcsSystems _systems;
 
-        void Start ()
+        void Start()
         {
             _world = new EcsWorld ();
             _playerConnection.World = _world;
@@ -34,12 +34,12 @@ namespace Construct
                 .Init();
         }
 
-        void Update ()
+        void Update()
         {
             _systems?.Run();
         }
 
-        void OnDestroy ()
+        void OnDestroy()
         {
             if (_systems != null) {
                 _systems.Destroy();

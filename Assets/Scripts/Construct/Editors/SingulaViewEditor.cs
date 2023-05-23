@@ -13,7 +13,7 @@ namespace Construct.Editors
         private SingulaView _singulaTarget;
         private ReorderableList _pimpleList;
 
-        private readonly float ITEM_LIST_HEIGHT = EditorGUIUtility.singleLineHeight * 2 + 5;
+        private readonly float ITEM_LIST_HEIGHT = EditorGUIUtility.singleLineHeight + 5;
 
         private void OnEnable()
         {

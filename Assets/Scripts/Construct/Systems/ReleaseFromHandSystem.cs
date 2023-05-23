@@ -9,7 +9,7 @@ namespace Construct.Systems
         private readonly EcsWorld _world;
         private readonly EcsFilter _releaseFromHandFilter;
         private readonly EcsFilter _possibleJoinFilter;
-        private readonly EcsPool<ReleaseFromHand> _releaseFromHand;
+        private readonly EcsPool<ReleaseFromHand> _releaseFromHandPool;
         private readonly EcsPool<InHand> _inHandPool;
         private readonly EcsPool<PossibleJoin> _possibleJoinPool;
 
@@ -18,7 +18,7 @@ namespace Construct.Systems
             _world = world;
             _releaseFromHandFilter = _world.Filter<Singula>().Inc<ReleaseFromHand>().End();
             _possibleJoinFilter = _world.Filter<Singula>().Inc<PossibleJoin>().End();
-            _releaseFromHand = _world.GetPool<ReleaseFromHand>();
+            _releaseFromHandPool = _world.GetPool<ReleaseFromHand>();
             _possibleJoinPool = _world.GetPool<PossibleJoin>();
             _inHandPool = _world.GetPool<InHand>();
         }
@@ -32,7 +32,7 @@ namespace Construct.Systems
                 }
 
                 _inHandPool.Del(entity);
-                _releaseFromHand.Del(entity);
+                _releaseFromHandPool.Del(entity);
             }
         }
     }
