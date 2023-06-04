@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Construct.Model;
 using Construct.Views;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Construct.Components
 {
@@ -17,7 +18,9 @@ namespace Construct.Components
 
         public Transform Transform;
 
-        public MeshRenderer Renderer;
+        public Outline Outline;
+
+        public XRGrabInteractable XRGrabInteractable;
 
         /// <summary>
         /// ”никальный идентификатор детали.

@@ -170,7 +170,7 @@ namespace Construct.Systems
                         inHand.PossibleJoinEcsEntity
                     };
 
-                    metaSingula.Renderer = null;
+                    metaSingula.Outline = null;
                     metaSingula.Id = MetaSingulaIdService.GetId();
                     metaSingula.Name = "meta_singula";
                     metaSingula.ConventusEcsEntity = rightSingula.ConventusEcsEntity;

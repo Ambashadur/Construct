@@ -28,11 +28,11 @@ namespace Construct.Systems
 
                     foreach (var singulaEntity in metaSingula.SingulaEcsEntities) {
                         ref var singula = ref _singulaPool.Get(singulaEntity);
-                        singula.Renderer.material.SetInt("_Outline", 1);
+                        singula.Outline.enabled = true;
                     }
                 } else {
                     ref var singula = ref _singulaPool.Get(entity);
-                    singula.Renderer.material.SetInt("_Outline", 1);
+                    singula.Outline.enabled = true;
                 }
 
                 _startFocusPool.Del(entity);

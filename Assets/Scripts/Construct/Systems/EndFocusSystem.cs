@@ -26,7 +26,7 @@ namespace Construct.Systems
         {
             foreach (var entity in _singulaEndFocusFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
-                singula.Renderer.material.SetInt("_Outline", 0);
+                singula.Outline.enabled = false;
                 _endFocusPool.Del(entity);
             }
 
@@ -35,7 +35,7 @@ namespace Construct.Systems
 
                 foreach (var singulaEntity in metaSingula.SingulaEcsEntities) {
                     ref var singula = ref _singulaPool.Get(singulaEntity);
-                    singula.Renderer.material.SetInt("_Outline", 0);
+                    singula.Outline.enabled = false;
                 }
 
                 _endFocusPool.Del(entity);
