@@ -17,7 +17,7 @@ namespace Construct.Systems
 
         private readonly Material _greenTransparent;
 
-        private const float nearDistance = 0.75f;
+        private const float nearDistance = 0.5f;
 
         private NearestPimple _nearestJoin = new();
         private NearestPimple? _oldNearestJoin = null;

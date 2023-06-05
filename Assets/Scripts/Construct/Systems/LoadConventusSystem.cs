@@ -20,8 +20,9 @@ namespace Construct.Systems
         private readonly EcsPool<Singula> _singulaPool;
 
         private readonly int _singulaLayer;
+        private readonly InteractionLayerMask _singulaInteractionLayerMask;
 
-        public LoadConventusSystem(EcsWorld world, LayerMask singulaLayer, IDbController controller)
+        public LoadConventusSystem(EcsWorld world, LayerMask singulaLayer, InteractionLayerMask interactionLayerMask, IDbController controller)
         {
             _world = world;
             _controller = controller;
@@ -31,6 +32,7 @@ namespace Construct.Systems
             _singulaPool = _world.GetPool<Singula>();
 
             _singulaLayer = (int)Mathf.Log(singulaLayer, 2);
+            _singulaInteractionLayerMask = interactionLayerMask;
         }
 
         public void Run(IEcsSystems systems)
@@ -67,29 +69,15 @@ namespace Construct.Systems
                     singulaObject.layer = _singulaLayer;
                     singulaObject.AddComponent<MeshCollider>().convex = true;
                     singulaObject.AddComponent<Rigidbody>();
+                    singulaObject.AddComponent<XRGrabInteractable>();
 
-                    var xrGrabInteractable = singulaObject.AddComponent<XRGrabInteractable>();
-                    xrGrabInteractable.movementType = XRBaseInteractable.MovementType.VelocityTracking;
-                    var onHoverEntered = new HoverEnterEvent();
-                    onHoverEntered.AddListener(args => args.interactableObject.transform.GetComponent<Outline>().enabled = true);
-                    xrGrabInteractable.hoverEntered = onHoverEntered;
-                    var onHoverExited = new HoverExitEvent();
-                    onHoverExited.AddListener(args => args.interactableObject.transform.GetComponent<Outline>().enabled = false);
-
-                    var outline = singulaObject.AddComponent<Outline>();
-
-                    outline.OutlineMode = Outline.Mode.OutlineAll;
-                    outline.OutlineColor = Color.green;
-                    outline.OutlineWidth = 3f;
-                    outline.enabled = false;
-
-                    singula.XRGrabInteractable = xrGrabInteractable;
                     singula.SingulaView = singulaObject.AddComponent<SingulaView>();
+                    singula.XRGrabInteractable = singula.SingulaView.SetXrGrabActions(_world, _singulaInteractionLayerMask);
                     singula.SingulaView.Id = singulaDto.singula_id;
                     singula.SingulaView.EcsEntity = singulaEntity;
                     singula.SingulaView.Name = singulaDto.name;
                     singula.Transform = singulaObject.GetComponent<Transform>();
-                    singula.Outline = outline;
+                    singula.Outline = AttachOutline(singulaObject);
                     singula.Id = singulaDto.singula_id;
                     singula.Name = singulaDto.name;
                     singula.Pimples = singulaDto.pimples.ToDictionary(
@@ -106,6 +94,18 @@ namespace Construct.Systems
 
                 _loadConventusPool.Del(entity);
             }
+        }
+
+        private Outline AttachOutline(GameObject gameObject)
+        {
+            var outline = gameObject.AddComponent<Outline>();
+
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineColor = Color.green;
+            outline.OutlineWidth = 5f;
+            outline.enabled = false;
+
+            return outline;
         }
     }
 }

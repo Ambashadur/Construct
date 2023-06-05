@@ -6,6 +6,7 @@ using Construct.Services;
 using Construct.Views;
 using Leopotam.EcsLite;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Construct.Systems
 {
@@ -122,6 +123,7 @@ namespace Construct.Systems
                     ref var rightMeta = ref _metaSingulaPool.Get(entity);
                     rightMeta.SingulaEcsEntities.Add(inHand.PossibleJoinEcsEntity);
                     leftSingula.Transform.SetParent(rightSingula.Transform);
+                    GameObject.Destroy(leftSingula.Transform.GetComponent<XRGrabInteractable>());
                     GameObject.Destroy(leftSingula.Transform.GetComponent<Rigidbody>());
 
                     rightSingula.Pimples = GetNewPimples(
@@ -137,6 +139,7 @@ namespace Construct.Systems
                     ref var leftMeta = ref _metaSingulaPool.Get(inHand.PossibleJoinEcsEntity);
                     leftMeta.SingulaEcsEntities.Add(entity);
                     rightSingula.Transform.SetParent(leftSingula.Transform);
+                    GameObject.Destroy(rightSingula.Transform.GetComponent<XRGrabInteractable>());
                     GameObject.Destroy(rightSingula.Transform.GetComponent<Rigidbody>());
 
                     leftSingula.Pimples = GetNewPimples(
@@ -157,8 +160,15 @@ namespace Construct.Systems
 
                     gameObject.AddComponent<Rigidbody>();
                     var metaSingulaView = gameObject.AddComponent<MetaSingulaView>();
+
+                    var interactionLayerMask = leftSingula.Transform.GetComponent<XRGrabInteractable>().interactionLayers;
+
+                    GameObject.Destroy(leftSingula.SingulaView.GetComponent<XRGrabInteractable>());
+                    GameObject.Destroy(rightSingula.SingulaView.GetComponent<XRGrabInteractable>());
                     GameObject.Destroy(leftSingula.SingulaView.GetComponent<Rigidbody>());
                     GameObject.Destroy(rightSingula.SingulaView.GetComponent<Rigidbody>());
+
+                    gameObject.AddComponent<XRGrabInteractable>();
 
                     var metaSingulaEntity = _world.NewEntity();
                     ref var meta = ref _metaSingulaPool.Add(metaSingulaEntity);
@@ -176,6 +186,7 @@ namespace Construct.Systems
                     metaSingula.ConventusEcsEntity = rightSingula.ConventusEcsEntity;
                     metaSingula.Transform = gameObject.GetComponent<Transform>();
                     metaSingula.SingulaView = gameObject.AddComponent<SingulaView>();
+                    metaSingula.XRGrabInteractable = metaSingula.SingulaView.SetXrGrabActions(_world, interactionLayerMask);
                     metaSingula.SingulaView.Id = metaSingula.Id;
                     metaSingula.SingulaView.Name = metaSingula.Name;
                     metaSingula.SingulaView.EcsEntity = metaSingulaEntity;

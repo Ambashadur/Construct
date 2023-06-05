@@ -5,12 +5,12 @@ namespace Construct.Services.Impl
 {
     public sealed class DbController : IDbController
     {
-        private readonly string _path = $"{Application.dataPath}/Scripts/Construct/Services/Impl/hirearchy.json";
+        private readonly string _path = "hirearchy";
 
         public ConventusDto DonwloadConventus(int id)
         {
-            var fileContent = File.ReadAllText(_path);
-            return JsonUtility.FromJson<ConventusDto>(fileContent);
+            var fileContent = Resources.Load<TextAsset>(_path);
+            return JsonUtility.FromJson<ConventusDto>(fileContent.text);
         }
     }
 }
