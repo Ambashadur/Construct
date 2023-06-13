@@ -68,7 +68,7 @@ namespace Construct.Systems
                 var nextJoinId = leftJoin.NextJoinIds.Intersect(rightJoin.NextJoinIds).First();
                 var nextJoin = conventus.Joins[nextJoinId];
 
-                // Собираем все точки соединений из левого соединения (не то что в руке)
+                // РЎРѕР±РёСЂР°РµРј РІСЃРµ С‚РѕС‡РєРё СЃРѕРµРґРёРЅРµРЅРёР№ РёР· Р»РµРІРѕРіРѕ СЃРѕРµРґРёРЅРµРЅРёСЏ (РЅРµ С‚Рѕ С‡С‚Рѕ РІ СЂСѓРєРµ)
                 if (nextJoin.LeftPimples.Count == 0) {
                     if (leftJoin.LeftJoinId == 0 && leftJoin.RightJoinId == 0) {
                         nextJoin.LeftPimples.Add(new SingulaJoin() {
@@ -81,7 +81,7 @@ namespace Construct.Systems
                     }
                 }
 
-                // Собираем все точки соединений из правого соединения (то что в руке)
+                // РЎРѕР±РёСЂР°РµРј РІСЃРµ С‚РѕС‡РєРё СЃРѕРµРґРёРЅРµРЅРёР№ РёР· РїСЂР°РІРѕРіРѕ СЃРѕРµРґРёРЅРµРЅРёСЏ (С‚Рѕ С‡С‚Рѕ РІ СЂСѓРєРµ)
                 if (nextJoin.RightPimples.Count == 0) {
                     if (rightJoin.LeftJoinId == 0 && rightJoin.RightJoinId == 0) {
                         nextJoin.RightPimples.Add(new SingulaJoin() {
@@ -191,7 +191,7 @@ namespace Construct.Systems
                     gameObject.AddComponent<Rigidbody>();
                     var interactable = gameObject.AddComponent<XRGrabInteractable>();
 
-                    // Нужно выключить элемент и потом включить, чтобы произошла регистрация колайдеров.
+                    // РќСѓР¶РЅРѕ РІС‹РєР»СЋС‡РёС‚СЊ СЌР»РµРјРµРЅС‚ Рё РїРѕС‚РѕРј РІРєР»СЋС‡РёС‚СЊ, С‡С‚РѕР±С‹ РїСЂРѕРёР·РѕС€Р»Р° СЂРµРіРёСЃС‚СЂР°С†РёСЏ РєРѕР»Р°Р№РґРµСЂРѕРІ.
                     interactable.enabled = false;
                     interactable.colliders.Add(leftSingula.Collider);
                     interactable.colliders.Add(rightSingula.Collider);

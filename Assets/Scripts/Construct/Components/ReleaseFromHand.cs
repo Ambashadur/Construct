@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент освобождения детали из руки.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ РґРµС‚Р°Р»Рё РёР· СЂСѓРєРё.
     /// </summary>
     public struct ReleaseFromHand { }
 }

@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент взятия модели детали в руки.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ РІР·СЏС‚РёСЏ РјРѕРґРµР»Рё РґРµС‚Р°Р»Рё РІ СЂСѓРєРё.
     /// </summary>
     struct TakeToHand { }
 }

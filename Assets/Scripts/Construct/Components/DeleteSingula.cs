@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент для удаления детали.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РґРµС‚Р°Р»Рё.
     /// </summary>
     struct DeleteSingula { }
 }

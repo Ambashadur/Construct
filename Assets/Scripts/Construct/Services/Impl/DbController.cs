@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Construct.Services.Impl
 {
     /// <summary>
-    /// Контроллер взаимодействия с удаленной базой данных.
+    /// РљРѕРЅС‚СЂРѕР»Р»РµСЂ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ СЃ СѓРґР°Р»РµРЅРЅРѕР№ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С….
     /// </summary>
     public sealed class DbController : IDbController
     {

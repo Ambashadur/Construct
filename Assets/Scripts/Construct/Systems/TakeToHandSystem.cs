@@ -61,7 +61,7 @@ namespace Construct.Systems
         }
 
         /// <summary>
-        /// Создаёт словарь содержащий уникальный идентификатор следующего <see cref="Join">Join</see> и <see cref="Pimple">Pimple</see>
+        /// РЎРѕР·РґР°С‘С‚ СЃР»РѕРІР°СЂСЊ СЃРѕРґРµСЂР¶Р°С‰РёР№ СѓРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃР»РµРґСѓСЋС‰РµРіРѕ <see cref="Join">Join</see> Рё <see cref="Pimple">Pimple</see>
         /// </summary>
         /// <param name="pimples"></param>
         /// <param name="conventus"></param>

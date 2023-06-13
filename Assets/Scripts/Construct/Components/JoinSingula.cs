@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент соединения деталей.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ СЃРѕРµРґРёРЅРµРЅРёСЏ РґРµС‚Р°Р»РµР№.
     /// </summary>
     public struct JoinSingula { }
 }

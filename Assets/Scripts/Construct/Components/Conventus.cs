@@ -4,22 +4,22 @@ using Construct.Model;
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент сборки.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ СЃР±РѕСЂРєРё.
     /// </summary>
     public struct Conventus
     {
         /// <summary>
-        /// Уникальный идентификатор сборки.
+        /// РЈРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃР±РѕСЂРєРё.
         /// </summary>
         public int Id;
 
         /// <summary>
-        /// Название сборки.
+        /// РќР°Р·РІР°РЅРёРµ СЃР±РѕСЂРєРё.
         /// </summary>
         public string Name;
 
         /// <summary>
-        /// Словарь соединений в сборке.
+        /// РЎР»РѕРІР°СЂСЊ СЃРѕРµРґРёРЅРµРЅРёР№ РІ СЃР±РѕСЂРєРµ.
         /// </summary>
         public Dictionary<int, Join> Joins;
     }

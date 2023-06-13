@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент начала выделения.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ РЅР°С‡Р°Р»Р° РІС‹РґРµР»РµРЅРёСЏ.
     /// </summary>
     public struct StartFocus { }
 }

@@ -1,7 +1,7 @@
 namespace Construct.Components
 {
     /// <summary>
-    /// Компонент окончания выделения детали.
+    /// РљРѕРјРїРѕРЅРµРЅС‚ РѕРєРѕРЅС‡Р°РЅРёСЏ РІС‹РґРµР»РµРЅРёСЏ РґРµС‚Р°Р»Рё.
     /// </summary>
     public struct EndFocus { }
 }

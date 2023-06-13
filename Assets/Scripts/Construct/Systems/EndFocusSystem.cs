@@ -24,14 +24,14 @@ namespace Construct.Systems
 
         public void Run (IEcsSystems systems)
         {
-            // Произвести окончание выделения для всех моделей деталей.
+            // РџСЂРѕРёР·РІРµСЃС‚Рё РѕРєРѕРЅС‡Р°РЅРёРµ РІС‹РґРµР»РµРЅРёСЏ РґР»СЏ РІСЃРµС… РјРѕРґРµР»РµР№ РґРµС‚Р°Р»РµР№.
             foreach (var entity in _singulaEndFocusFilter) {
                 ref var singula = ref _singulaPool.Get(entity);
                 singula.Outline.enabled = false;
                 _endFocusPool.Del(entity);
             }
 
-            // Произвести окончание выделения для всех моделей мета деталей.
+            // РџСЂРѕРёР·РІРµСЃС‚Рё РѕРєРѕРЅС‡Р°РЅРёРµ РІС‹РґРµР»РµРЅРёСЏ РґР»СЏ РІСЃРµС… РјРѕРґРµР»РµР№ РјРµС‚Р° РґРµС‚Р°Р»РµР№.
             foreach (var entity in _metaSingulaEndFocusFilter) {
                 ref var metaSingula = ref _metaSingulaPool.Get(entity);
 
