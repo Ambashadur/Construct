@@ -7,6 +7,7 @@ using Construct.Views;
 using Leopotam.EcsLite;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Transformers;
 
 namespace Construct.Systems
 {
@@ -104,6 +105,7 @@ namespace Construct.Systems
                         ref var inMetaSingula = ref _singulaPool.Get(inMetaSingulaEcsEntity);
                         leftMeta.SingulaEcsEntities.Add(inMetaSingulaEcsEntity);
                         inMetaSingula.Transform.SetParent(leftSingula.Transform);
+                        leftSingula.XRGrabInteractable.colliders.Add(inMetaSingula.Collider);
 
                         ref var inJoin = ref _inJoinPool.Get(inMetaSingulaEcsEntity);
                         inJoin.MetaSingulaEcsEntity = inHand.PossibleJoinEcsEntity;
@@ -118,13 +120,23 @@ namespace Construct.Systems
                         leftSingula);
 
                     GameObject.Destroy(rightSingula.Transform.gameObject);
+                    leftSingula.XRGrabInteractable.enabled = false;
+                    leftSingula.XRGrabInteractable.enabled = true;
                     _deleteSingulaPool.Add(entity);
                 } else if (isRightSingulaMeta) {
                     ref var rightMeta = ref _metaSingulaPool.Get(entity);
                     rightMeta.SingulaEcsEntities.Add(inHand.PossibleJoinEcsEntity);
-                    leftSingula.Transform.SetParent(rightSingula.Transform);
-                    GameObject.Destroy(leftSingula.Transform.GetComponent<XRGrabInteractable>());
+
+                    GameObject.Destroy(leftSingula.SingulaView.GetComponent<XRSingleGrabFreeTransformer>());
+                    GameObject.Destroy(leftSingula.XRGrabInteractable);
                     GameObject.Destroy(leftSingula.Transform.GetComponent<Rigidbody>());
+
+                    rightSingula.XRGrabInteractable.enabled = false;
+                    rightSingula.XRGrabInteractable.colliders.Add(leftSingula.Collider);
+                    rightSingula.XRGrabInteractable.enabled = true;
+
+                    leftSingula.Transform.SetParent(rightSingula.Transform);
+                    leftSingula.XRGrabInteractable = null;
 
                     rightSingula.Pimples = GetNewPimples(
                         rightSingula,
@@ -138,9 +150,17 @@ namespace Construct.Systems
                 } else if (isLeftSingulaMeta) {
                     ref var leftMeta = ref _metaSingulaPool.Get(inHand.PossibleJoinEcsEntity);
                     leftMeta.SingulaEcsEntities.Add(entity);
-                    rightSingula.Transform.SetParent(leftSingula.Transform);
-                    GameObject.Destroy(rightSingula.Transform.GetComponent<XRGrabInteractable>());
+
+                    GameObject.Destroy(rightSingula.SingulaView.GetComponent<XRSingleGrabFreeTransformer>());
+                    GameObject.Destroy(rightSingula.XRGrabInteractable);
                     GameObject.Destroy(rightSingula.Transform.GetComponent<Rigidbody>());
+
+                    leftSingula.XRGrabInteractable.enabled = false;
+                    leftSingula.XRGrabInteractable.colliders.Add(rightSingula.Collider);
+                    leftSingula.XRGrabInteractable.enabled = true;
+
+                    rightSingula.Transform.SetParent(leftSingula.Transform);
+                    rightSingula.XRGrabInteractable = null;
 
                     leftSingula.Pimples = GetNewPimples(
                         rightSingula,
@@ -155,20 +175,32 @@ namespace Construct.Systems
                     var gameObject = new GameObject("MetaSingula");
                     gameObject.transform.position = leftSingula.Transform.position;
                     gameObject.transform.rotation = leftSingula.Transform.rotation;
-                    leftSingula.Transform.SetParent(gameObject.transform);
-                    rightSingula.Transform.SetParent(gameObject.transform);
 
-                    gameObject.AddComponent<Rigidbody>();
-                    var metaSingulaView = gameObject.AddComponent<MetaSingulaView>();
+                    var interactionLayerMask = leftSingula.XRGrabInteractable.interactionLayers;
 
-                    var interactionLayerMask = leftSingula.Transform.GetComponent<XRGrabInteractable>().interactionLayers;
-
-                    GameObject.Destroy(leftSingula.SingulaView.GetComponent<XRGrabInteractable>());
-                    GameObject.Destroy(rightSingula.SingulaView.GetComponent<XRGrabInteractable>());
+                    GameObject.Destroy(leftSingula.SingulaView.GetComponent<XRSingleGrabFreeTransformer>());
+                    GameObject.Destroy(rightSingula.SingulaView.GetComponent<XRSingleGrabFreeTransformer>());
+                    GameObject.Destroy(leftSingula.XRGrabInteractable);
+                    GameObject.Destroy(rightSingula.XRGrabInteractable);
                     GameObject.Destroy(leftSingula.SingulaView.GetComponent<Rigidbody>());
                     GameObject.Destroy(rightSingula.SingulaView.GetComponent<Rigidbody>());
 
-                    gameObject.AddComponent<XRGrabInteractable>();
+                    leftSingula.XRGrabInteractable = null;
+                    rightSingula.XRGrabInteractable = null;
+
+                    gameObject.AddComponent<Rigidbody>();
+                    var interactable = gameObject.AddComponent<XRGrabInteractable>();
+
+                    // Нужно выключить элемент и потом включить, чтобы произошла регистрация колайдеров.
+                    interactable.enabled = false;
+                    interactable.colliders.Add(leftSingula.Collider);
+                    interactable.colliders.Add(rightSingula.Collider);
+                    interactable.enabled = true;
+
+                    leftSingula.Transform.SetParent(gameObject.transform);
+                    rightSingula.Transform.SetParent(gameObject.transform);
+
+                    var metaSingulaView = gameObject.AddComponent<MetaSingulaView>();
 
                     var metaSingulaEntity = _world.NewEntity();
                     ref var meta = ref _metaSingulaPool.Add(metaSingulaEntity);
@@ -209,7 +241,7 @@ namespace Construct.Systems
                 }
 
                 _joinSingulaPool.Del(entity);
-                _releaseFromHandPool.Add(entity);
+                if (!_releaseFromHandPool.Has(entity)) _releaseFromHandPool.Add(entity);
             }
         }
 

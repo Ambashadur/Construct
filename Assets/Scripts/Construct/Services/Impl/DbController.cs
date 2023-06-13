@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Construct.Services.Impl
 {
+    /// <summary>
+    /// Контроллер взаимодействия с удаленной базой данных.
+    /// </summary>
     public sealed class DbController : IDbController
     {
         private readonly string _path = "hirearchy";

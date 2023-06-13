@@ -52,11 +52,13 @@ namespace Construct.Systems
                 _nearestJoin.NearJoinId = -1;
                 _nearestJoin.PimpleId = -1;
 
+                // Получить словарь положений точек возможных соединений
                 var pimplePositions = new Dictionary<int, Vector3>();
                 foreach (var kv in singula.Pimples) {
                     pimplePositions[kv.Key] = singula.Transform.TransformPoint(kv.Value.Position);
                 }
 
+                // Найти ближайшую точку соединения
                 foreach (var possibleJoinEntity in _possibleJoinFilter) {
                     ref var possibleJoinSingula = ref _singulaPool.Get(possibleJoinEntity);
                     ref var possibleJoin = ref _possibleJoinPool.Get(possibleJoinEntity);

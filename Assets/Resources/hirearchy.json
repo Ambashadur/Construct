@@ -7,7 +7,7 @@
             "singula_id": 2,
             "model": "engine_assy2_conrod",
             "position": {
-                "x": -4,
+                "x": -6,
                 "y": 1.5,
                 "z": 0
             },
@@ -37,7 +37,7 @@
             "singula_id": 9,
             "model": "engine_assy2_piston",
             "position": {
-                "x": -2,
+                "x": -5,
                 "y": 1.5,
                 "z": 0
             },
@@ -58,7 +58,7 @@
             "singula_id": 15,
             "model": "engine_assy2_wrist_pin",
             "position": {
-                "x": 0,
+                "x": -4,
                 "y": 1.5,
                 "z": 0
             },
@@ -79,7 +79,7 @@
             "singula_id": 16,
             "model": "engine_assy2_conrod-cap",
             "position": {
-                "x": 1,
+                "x": -3,
                 "y": 1.5,
                 "z": 0
             },
@@ -100,7 +100,7 @@
             "singula_id": 17,
             "model": "engine_assy2_conrod-brg",
             "position": {
-                "x": 2,
+                "x": -2.5,
                 "y": 1.5,
                 "z": 0
             },
@@ -121,13 +121,13 @@
             "singula_id": 18,
             "model": "engine_assy2_conrod-brg_1",
             "position": {
-                "x": 3,
+                "x": -2,
                 "y": 1.5,
                 "z": 0
             },
             "pimples": [
                 {
-                    "id": 1,
+                    "id": 0,
                     "position": {
                         "x": -0.0021,
                         "y": -0.027,

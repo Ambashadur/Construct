@@ -16,10 +16,24 @@ namespace Construct.Components
         /// </summary>
         public SingulaView SingulaView;
 
+        /// <summary>
+        /// —сылка на компонент Transform.
+        /// </summary>
         public Transform Transform;
 
+        /// <summary>
+        /// —сылка на колайдер модели детали.
+        /// </summary>
+        public Collider Collider;
+
+        /// <summary>
+        /// —сылка на компонент выделени€ модели.
+        /// </summary>
         public Outline Outline;
 
+        /// <summary>
+        /// —сылка на компонент взаимодействи€ с моделью детали.
+        /// </summary>
         public XRGrabInteractable XRGrabInteractable;
 
         /// <summary>

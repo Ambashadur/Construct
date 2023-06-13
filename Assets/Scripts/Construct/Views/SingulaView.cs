@@ -18,45 +18,43 @@ namespace Construct.Views
 
         public XRGrabInteractable SetXrGrabActions(EcsWorld world, InteractionLayerMask interactionLayerMask)
         {
-            if (_xrGrabInteractable == null) _xrGrabInteractable = GetComponent<XRGrabInteractable>();
-
-            _xrGrabInteractable.movementType = XRBaseInteractable.MovementType.Kinematic;
+            _xrGrabInteractable = GetComponent<XRGrabInteractable>();
+            _xrGrabInteractable.movementType = XRBaseInteractable.MovementType.VelocityTracking;
             _xrGrabInteractable.interactionLayers = interactionLayerMask;
-
-            var onHoverEntered = new HoverEnterEvent();
-            onHoverEntered.AddListener(args => {
+            _xrGrabInteractable.hoverEntered.AddListener(_ => {
                 if (!world.GetPool<StartFocus>().Has(EcsEntity)) world.GetPool<StartFocus>().Add(EcsEntity);
             });
 
-            _xrGrabInteractable.hoverEntered = onHoverEntered;
-
-            var onHoverExited = new HoverExitEvent();
-            onHoverExited.AddListener(args => {
+            _xrGrabInteractable.hoverExited.AddListener(_ => {
                 if (!world.GetPool<EndFocus>().Has(EcsEntity)) world.GetPool<EndFocus>().Add(EcsEntity);
             });
 
-            _xrGrabInteractable.hoverExited = onHoverExited;
+            _xrGrabInteractable.selectEntered.AddListener(args => {
+                var colliders = args.interactableObject.colliders;
+                var handPosition = args.interactorObject.transform.position;
+                var shortestDistance = float.MaxValue;
+                var closestCollider = colliders[0];
 
-            var onSelectEnter = new SelectEnterEvent();
-            onSelectEnter.AddListener(args => {
+                foreach (var collider in colliders) {
+                    var distance = Vector3.Distance(handPosition, collider.transform.position);
+                    if (distance <= shortestDistance) {
+                        shortestDistance = distance;
+                        closestCollider = collider;
+                    }
+                }
+
+                _xrGrabInteractable.attachTransform = closestCollider.transform;
+
                 if (!world.GetPool<TakeToHand>().Has(EcsEntity)) world.GetPool<TakeToHand>().Add(EcsEntity);
             });
 
-            _xrGrabInteractable.selectEntered = onSelectEnter;
-
-            var onSelectExit = new SelectExitEvent();
-            onSelectExit.AddListener(args => {
+            _xrGrabInteractable.selectExited.AddListener(_ => {
                 if (!world.GetPool<ReleaseFromHand>().Has(EcsEntity)) world.GetPool<ReleaseFromHand>().Add(EcsEntity);
             });
 
-            _xrGrabInteractable.selectExited = onSelectExit;
-
-            var onActivate = new ActivateEvent();
-            onActivate.AddListener(args => {
+            _xrGrabInteractable.activated.AddListener(_ => {
                 if (!world.GetPool<JoinSingula>().Has(EcsEntity)) world.GetPool<JoinSingula>().Add(EcsEntity);
             });
-
-            _xrGrabInteractable.activated = onActivate;
 
             return _xrGrabInteractable;
         }

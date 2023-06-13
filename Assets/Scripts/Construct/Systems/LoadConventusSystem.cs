@@ -67,7 +67,8 @@ namespace Construct.Systems
                         Quaternion.identity);
 
                     singulaObject.layer = _singulaLayer;
-                    singulaObject.AddComponent<MeshCollider>().convex = true;
+                    var singulaCollider = singulaObject.AddComponent<MeshCollider>();
+                    singulaCollider.convex = true;
                     singulaObject.AddComponent<Rigidbody>();
                     singulaObject.AddComponent<XRGrabInteractable>();
 
@@ -76,6 +77,7 @@ namespace Construct.Systems
                     singula.SingulaView.Id = singulaDto.singula_id;
                     singula.SingulaView.EcsEntity = singulaEntity;
                     singula.SingulaView.Name = singulaDto.name;
+                    singula.Collider = singulaCollider;
                     singula.Transform = singulaObject.GetComponent<Transform>();
                     singula.Outline = AttachOutline(singulaObject);
                     singula.Id = singulaDto.singula_id;
